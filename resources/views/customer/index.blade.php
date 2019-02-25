@@ -32,7 +32,7 @@
                             <a target="_blank" href="{{route('printcust') }}" class="btn btn-primary btn-sm"><i class="fa fa-fw fa-print"></i></a>
                         </div>
                     </div>
-                    <div class="">
+                    <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
