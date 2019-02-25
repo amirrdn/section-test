@@ -37,7 +37,6 @@
                             <thead>
                                 <tr>
                                     <th>First Name</th>
-                                    <th>Last Name</th>
                                     <th>DOB</th>
                                     <th>Gender</th>
                                     <th>Phone</th>
@@ -49,8 +48,7 @@
                             <tbody>
                                 @foreach($cust as $b)
                                 <tr>
-                                    <td>{{ $b->first_name }}</td>
-                                    <td>{{ $b->last_name }}</td>
+                                    <td>{{ $b->first_name }} {{ $b->last_name }}</td>
                                     <td>{{ $b->dob }}</td>
                                     <td>@if($b->gender == 1) Man @else Women @endif</td>
                                     <td>{{ $b->phone_number }}</td>

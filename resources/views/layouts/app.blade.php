@@ -14,13 +14,15 @@
     @include('includes.headTags')
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
+<?php  use App\Clasess\UserClass;?>
+@guest
+@else
     <?php
-        use App\Clasess\UserClass;
-
         $user      = new UserClass;
 
         $getname    = $user->getNameUser(\Auth::user()->id);
     ?>
+@endguest
     <div class="wrapper">
         @include('includes.header')
         @include('includes.sidebar')

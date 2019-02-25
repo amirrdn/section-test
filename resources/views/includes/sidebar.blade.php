@@ -7,7 +7,11 @@
           <img src="{{ asset('admin/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
+          @guest
+          Guest
+          @else
           <p> {{ $getname->name }}</p>
+          @endguest
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
