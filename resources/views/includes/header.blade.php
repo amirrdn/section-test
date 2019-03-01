@@ -231,7 +231,7 @@
                   @guest
                     Guest
                   @else
-                  {{ $getname->name }}
+                  {{ $getname->first_name }} {{ $getname->middle_name }} {{ $getname->last_name }}
                   @endguest
                   <small>Member since Nov. 2012</small>
                 </p>

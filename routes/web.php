@@ -17,7 +17,7 @@ Route::get('/', function () {
 Route::get('/register-user', function () {
     return view('register');
 });
-
+Route::post('/attempt', 'User\LoginController@attempt')->name('signin.attempt');
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
@@ -29,4 +29,8 @@ Route::post('/update-customer/{id}', 'CustomerController@update')->name('updatec
 Route::get('/delete-customer/{id}', 'CustomerController@delete')->name('deletecust');
 Route::get('/print-customer', 'CustomerController@Prints')->name('printcust');
 
+/* USER LINK */
 
+Route::get('/user-list', 'User\UserController@index')->name('user_list');
+Route::get('/edit-user/{id}', 'User\UserController@edit')->name('edit_user');
+Route::get('/get-data-user', ['as'=>'get.datauser','uses'=>'User\UserController@getData']);

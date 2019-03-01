@@ -29,31 +29,40 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="../../index2.html"><b>Admin</b>LTE</a>
+    <a href="../../index2.html"><b>CRM</b></a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <p class="login-box-msg">Sign in to start your session</p>
+    <br />
+  <div class="flash-message">
+							@foreach (['danger', 'warning', 'success', 'info'] as $msg)
+							  @if(Session::has('alert-' . $msg))
 
-    <form action="{{ route('login') }}" method="post">
+							  <p class="alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }} <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
+							  @endif
+							@endforeach
+              @if ($errors->has('email'))
+                <p class="alert alert-danger">
+                  {{ $errors->first('email') }}
+                 </p>
+              @endif
+            </div>
+
+    <form action="{{ route('signin.attempt') }}" method="post">
     @csrf
       <div class="form-group has-feedback"> 
         <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="Email" name="email" value="{{ old('email') }}" required autofocus>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
         @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
+          <span class="invalid-feedback" role="alert">
+            <strong>{{ $errors->first('email') }}</strong>
+          </span>
+        @endif
       </div>
       <div class="form-group has-feedback">
         <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="Password" name="password" required>
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-        @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
+        
       </div>
       <div class="row">
         <div class="col-xs-8">

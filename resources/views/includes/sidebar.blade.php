@@ -10,7 +10,7 @@
           @guest
           Guest
           @else
-          <p> {{ $getname->name }}</p>
+          <p> {{ $getname->first_name }} {{ $getname->middle_name }} {{ $getname->last_name }}</p>
           @endguest
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
