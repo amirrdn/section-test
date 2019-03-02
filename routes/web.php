@@ -32,5 +32,10 @@ Route::get('/print-customer', 'CustomerController@Prints')->name('printcust');
 /* USER LINK */
 
 Route::get('/user-list', 'User\UserController@index')->name('user_list');
+Route::get('/user-add', 'User\UserController@create')->name('user_create');
+Route::post('/user-save', 'User\UserController@store')->name('user_save');
 Route::get('/edit-user/{id}', 'User\UserController@edit')->name('edit_user');
+Route::post('/update-user/{id}', 'User\UserController@updete')->name('update_user');
+Route::get('/delete-user/{id}', 'User\UserController@delete')->name('delete_user');
 Route::get('/get-data-user', ['as'=>'get.datauser','uses'=>'User\UserController@getData']);
+Route::post('/search-data-user', ['as'=>'get.searchdatauser','uses'=>'User\UserController@getCustomFilterData']);

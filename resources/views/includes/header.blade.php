@@ -219,7 +219,7 @@
               @guest
               <span class="hidden-xs"> Guest</span>
               @else
-              <span class="hidden-xs"> {{ $getname->name }}</span>
+              <span class="hidden-xs"> {{ $getname->first_name }} {{ $getname->middle_name }} {{ $getname->last_name }}</span>
               @endguest
             </a>
             <ul class="dropdown-menu">

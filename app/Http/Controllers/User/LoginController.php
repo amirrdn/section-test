@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use Auth;
 use App\User;
 use App\Models\MRole;
-
+use Carbon;
 class LoginController extends Controller
 {
     public function attempt(Request $request,User $attempts)
@@ -22,13 +22,14 @@ class LoginController extends Controller
             'password' => $request->password,
             'is_enebled' => 'yes',
         ]);
-
         $user = $user = User::where('email', '=', $attempts['email'])->first();
         if(!\Hash::check($attempts['password'], $user->password)){
             $request->session()->flash('msg', 'Warning !');
             $request->session()->flash('alert-danger', 'passowrd is not match');
             return redirect('login')->with([ 'msg','Not Active!']);
         }elseif (Auth::attempt($attempts, (bool) $request->remember)) {
+            $cds = User::where('id',$user->id)->update(['last_login_at' => \Carbon\Carbon::now()->toDateTimeString(),
+            'last_login_ip' => $request->getClientIp()]);;
             return redirect()->intended('/');
         }
         $cekstatus	= User::where('is_enebled','no')->get();

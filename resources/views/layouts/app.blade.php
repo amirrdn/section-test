@@ -13,6 +13,52 @@
     <!-- Scripts -->
     
     @include('includes.headTags')
+    <style>
+    input[type="text"], input[type="email"] {
+        font-size: 1.6rem;
+        color: #010100;
+        width: 100%;
+        line-height: 65px;
+        padding-left: 12px;
+    }
+    .has-error input[type="text"], .has-error input[type="email"], .has-error select {
+        border: 1px solid #a94442;
+    }
+    #pswd_info {
+        color: #fff;
+        left: 20px;
+        top: 115px;
+    }
+    .dengertext{
+        color: red;
+    }
+
+
+    .valid {
+        color: green;
+        line-height: 21px;
+        padding-left: 22px;
+        display: none;
+    }
+
+    .invalid {
+        color: red;
+        line-height: 21px;
+    }
+
+
+    #pswd_info::before {
+        content: "";
+        height: 25px;
+        left: -13px;
+        margin-top: -12.5px;
+        top: 50%;
+        transform: rotate(45deg);
+    }
+    #pswd_info {
+        display:none;
+    }
+    </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <?php  use App\Clasess\UserClass;?>
