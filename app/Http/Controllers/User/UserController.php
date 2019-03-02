@@ -42,7 +42,7 @@ class UserController extends Controller
         $user                       = User::join('role', 'users.role_id', 'role.id')->where('users.is_delete', '0')
                                     ->select('users.id', 'users.user_image', 'users.first_name', 'users.middle_name',
                                     'users.last_name', 'user_name', 'users.role_id', 'users.is_enebled', 'users.email',
-                                    'users.last_login_at', 'role.id as role_id');
+                                    'users.last_login_at', 'role.id as role_id', 'role.role_name');
         return DataTables::of($user)
         ->filter(function ($query) {
             if (request()->has('name')) {
