@@ -117,7 +117,9 @@
                 <label for="dob">Picture <span class="dengertext">*</span></label>
                 {!! Form::file('image', null, array('required' => 'required', 'autofocus' => 'autofocus','placeholder' => 'Picture','class' => 'form-control', 'data-error' => 'This user name field is required')) !!}
                 <div class="help-block with-errors"></div>
+                @if(Request::is('edit-user/*') )
                 <img src="{{ asset($user->user_image)}}" width="30%">
+                @endif
             </div>
             <div class="box-footer">
                 <button type="submit" id="submit" class="btn btn-primary">Submit</button>
