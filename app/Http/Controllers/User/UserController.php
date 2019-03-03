@@ -74,7 +74,12 @@ class UserController extends Controller
         })
        ->addColumn('image', function ($user) { 
             $url= asset($user->user_image);
-            return '<img src="'.$url.'" border="0" width="30%" class="img-rounded img-responsive center-block" align="center" />';
+            if(!empty($url)){
+                $img    = $url;
+            }else{
+                $img    = asset('admin/dist/img/avatar2.png');
+            }
+            return '<img src="'.$img.'" border="0" width="30%" class="img-rounded img-responsive center-block" align="center" />';
         })
         ->addColumn('nomers', function($user) {
             return $user++;
@@ -104,7 +109,7 @@ class UserController extends Controller
     public function updete(Request $request, $id)
     {
         $users                      = $this->user->UpdateUser($request,$id);
-        $request->session()->flash('alert-success', 'was successful insert!');
+        $request->session()->flash('alert-success', 'was successful Update!');
 		return redirect()->route('user_list');
     }
     public function delete($id)

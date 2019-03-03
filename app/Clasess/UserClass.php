@@ -92,6 +92,8 @@ class UserClass {
             $imageName = $nmttd . '.' . 
             $request->file('image')->getClientOriginalExtension();            
             $request->file('image')->move($path, preg_replace('/\s+/', '', $imageName));
+        }else{
+            $post_imgs                  = asset('admin/dist/img/avatar2.png');
         }
 
         $user                       = new User;
