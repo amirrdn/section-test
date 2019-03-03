@@ -166,7 +166,7 @@ return [
         Yajra\Datatables\DatatablesServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Elibyy\TCPDF\ServiceProvider::class,
-
+        Sentry\Laravel\ServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -234,6 +234,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Sentry' => Sentry\Laravel\Facade::class,
 
     ],
 
