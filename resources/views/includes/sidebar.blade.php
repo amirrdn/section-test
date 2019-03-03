@@ -55,6 +55,19 @@
           </ul>
         </li>
 
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-users"></i> <span>Roles</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{{ route('roles') }}"><i class="fa fa-circle-o"></i> Index</a></li>
+            <li><a href="{{ route('rolescreate') }}"><i class="fa fa-circle-o"></i> Add</a></li>
+          </ul>
+        </li>
+
       </ul>
     </section>
     <!-- /.sidebar -->

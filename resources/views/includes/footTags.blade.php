@@ -102,7 +102,7 @@
                 d.email = $('input[name=email]').val();
                 d.user_name = $('input[name=user_name]').val();
                 d.roles = $('select[name=roles]').val();
-                d.status = $('select[name=status]').val();
+                d.statusd = $('select[name=status]').val();
             }
         },
         columns: [
@@ -125,13 +125,34 @@
         } );
     } ).draw();
       $('#search-form').submit(function(e) {
+        
+        var name      = $('#name').val();
+        var email     = $('#email').val();
+        var username  = $('#user_name').val();
+
+        $('input[type=text].text_div').val(name);
+        
+        $('input[type=text].email').val(email);
+        $('input[type=text].user_name').val(username);
+
+
         $('#modal-default').modal('toggle');
         t.draw();
         e.preventDefault();
         return false;
     });
+    $("#role_id").on('change', function () {
+      $('input[type=text].role_id').val($(this).val());
+    });
+    $("#statusd").on('change', function () {
+      $('input[type=text].status').val($(this).val());
+    });
+
+
 } );
-        </script>
+
+
+</script>
 @endif
 <script src="{{ asset('admin/bower_components/moment/min/moment.min.js') }}"></script>
 

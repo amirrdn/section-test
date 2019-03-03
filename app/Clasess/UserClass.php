@@ -19,7 +19,7 @@ class UserClass {
     }
     public function pluckRoles()
     {
-        return MRole::pluck('role_name', 'id');
+        return MRole::where('role_status', 1)->pluck('role_name', 'id');
     }
     public function nameroles()
     {

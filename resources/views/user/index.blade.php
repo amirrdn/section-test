@@ -11,13 +11,17 @@ input[type="text"], input[type="email"] {
         color: #010100;
         width: 100%;
     }
+    div.dataTables_wrapper div.dataTables_filter {
+    text-align: right;
+    margin-top: -43px;
+}
 </style>
 
 <div class="content-wrapper">
     <section class="content-header">
-        <h1>Users<small>advanced tables</small></h1>
+        <h1>Users</h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
             <li class="active">Users</li>
         </ol>
         
@@ -44,12 +48,33 @@ input[type="text"], input[type="email"] {
 							@endforeach
                           </div> 
                            
-                          
+                        <div class="form-group">
+                            <form action="{{ route('pdfuser') }}" method="get" style="display:hidden; margin-right: -20px" class="col-sm-1">
+                                <input type="text" name="name" class="text_div form-controll" style="display:none">
+                                <input type="text" name="role_id" class="role_id form-controll" style="display:none">
+                                <input type="text" name="email" class="email form-controll" style="display:none">
+                                <input type="text" name="status" class="status form-controll" style="display:none">
+                                <input type="text" name="user_name" class="user_name form-controll" style="display:none">
+                                <button formtarget="_blank" type="submit" class="btn btn-default btn-sm">PDF</button>
+                            </form>
+                            <form action="{{ route('userpirnt') }}" method="get">
+                                <input type="text" name="name" class="text_div form-controll" style="display:none">
+                                <input type="text" name="role_id" class="role_id form-controll" style="display:none">
+                                <input type="text" name="email" class="email form-controll" style="display:none">
+                                <input type="text" name="status" class="status form-controll" style="display:none">
+                                <input type="text" name="user_name" class="user_name form-controll" style="display:none">
+                                <button formtarget="_blank" type="submit" class="btn btn-default btn-sm">Print</button>
+                            </form>
+                        </div>
+                        <!--
+                            <iframe src="{{ route('userpirnt')}}" name="frame1" style="display:none"></iframe>
+                            <button type="button" class="btn btn-default btn-sm" onclick="frames['frame1'].print()">Print</button>
+                        -->
                         <table class="table table-bordered" id="users-table">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Image</th>
+                                    <th style="width: 16%;">Image</th>
                                     <th>Name</th>
                                     <th>Username</th>
                                     <th>Role</th>
@@ -79,7 +104,7 @@ input[type="text"], input[type="email"] {
                                                 <br />
                                                 <div class="form-group">
                                                     <label for="name" class="col-md-12">Role <span class="dengertext">*</span></label>
-                                                    {!! Form::select('roles',$role_id,null,['class' => 'form-control', 'placeholder' => 'Please Select']) !!}
+                                                    {!! Form::select('roles',$role_id,null,['id' => 'role_id','class' => 'form-control', 'placeholder' => 'Please Select']) !!}
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
@@ -90,7 +115,8 @@ input[type="text"], input[type="email"] {
                                                 <br />
                                                 <div class="form-group">
                                                     <label for="name" class="col-md-12">Status</label>
-                                                    <select name="status" class="form-control">
+                                                    <select name="status" class="form-control" id="statusd">
+                                                        <option value="null">Please Select</option>
                                                         <option value="yes">Enebled</option>
                                                         <option value="no">Disebled</option>
                                                     </select>
