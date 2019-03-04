@@ -152,11 +152,15 @@
         $('input[type=text].email').val(email);
         $('input[type=text].user_name').val(username);
 
-
         $('#modal-default').modal('toggle');
+       
         t.draw();
         e.preventDefault();
-        return false;
+       $('input[name=email]').val("");
+       $('input[name=user_name]').val("");
+       $('select[name=roles]').prop('selectedIndex',0);
+        $('input[name=name]').val(" ");
+       $('select[name=status]').prop('selectedIndex',0);
     });
     $("#role_id").on('change', function () {
       $('input[type=text].role_id').val($(this).val());

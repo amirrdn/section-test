@@ -134,7 +134,7 @@ input[type="text"], input[type="email"] {
                                                 <div class="form-group">
                                                     <label for="name" class="col-md-12">Status</label>
                                                     <select name="status" class="form-control" id="statusd">
-                                                        <option value="null">Please Select</option>
+                                                        <option value="0">Please Select</option>
                                                         <option value="yes">Enebled</option>
                                                         <option value="no">Disebled</option>
                                                     </select>

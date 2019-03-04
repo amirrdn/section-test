@@ -46,31 +46,17 @@ class UserController extends Controller
                                     'users.last_name', 'user_name', 'users.role_id', 'users.is_enebled', 'users.email',
                                     'users.last_login_at', 'role.id as role_id', 'role.role_name']);
         $data = DataTables::of($user)
-        ->filter(function ($query) {
-            if (request()->has('name')) {
-                $query->where('users.first_name', 'like', "%" . request('name') . "%")->where('users.is_delete', '0');
-            }
-            if (request()->has('email')) {
-                $query->where('users.email', 'like', "%" . request('email') . "%")->where('users.is_delete', '0');
-            }
-            if (request()->has('user_name')) {
-                $query->where('users.user_name', 'like', "%" . request('user_name') . "%")->where('users.is_delete', '0');
-            }
-            if (request()->has('roles')) {
-                $query->where('users.role_id', 'like', "%" . request('roles') . "%")->where('users.is_delete', '0');
-            }
-            if (request()->has('statusd')) {
-                $query->where('users.is_enebled', 'like', "%" . request('statusd') . "%")->where('users.is_delete', '0');
-            }
-            if (request()->has('searchingfield')) {
+       
+        /*
+        if (request()->has('searchingfield')) {
+            $data->filter(function ($query) {
                 $query->where('users.user_name', 'like', "%" . request('searchingfield') . "%")->where('users.is_delete', '0');
                 $query->orWhere('users.first_name', 'like', "%" . request('searchingfield') . "%")->where('users.is_delete', '0');
                 $query->orWhere('users.middle_name', 'like', "%" . request('searchingfield') . "%")->where('users.is_delete', '0');
                 $query->orWhere('users.last_name', 'like', "%" . request('searchingfield') . "%")->where('users.is_delete', '0');
-            }
-            
-
-        })
+        });
+    }
+    */
         
         ->addColumn('nomers', function($user) {
             return $user++;
@@ -98,7 +84,45 @@ class UserController extends Controller
                 $dbs    = '<button class="btn btn-sm btn-default">Disabled</button>';
             }
             return $dbs;
+        })->filter(function ($query) {
+            
+            if (request()->has('email')) {
+                $query->where('users.email', 'like', "%" . request('email') . "%")->where('users.is_delete', '0');
+            }
+            if (request()->has('user_name')) {
+                $query->where('users.user_name', 'like', "%" . request('user_name') . "%")->where('users.is_delete', '0');
+            }
+            if (request()->has('roles')) {
+                $query->where('users.role_id', 'like', "%" . request('roles') . "%")->where('users.is_delete', '0');
+            }
+            
+            
+            
+           
+            
+            
         });
+        if (!empty($request->get('name') )) {
+            $data->filter(function ($query) {
+                $query->where('users.user_name', 'like', "%" . request('name') . "%")->where('users.is_delete', '0');
+                $query->orWhere('users.first_name', 'like', "%" . request('name') . "%")->where('users.is_delete', '0');
+                $query->orWhere('users.middle_name', 'like', "%" . request('name') . "%")->where('users.is_delete', '0');
+                $query->orWhere('users.last_name', 'like', "%" . request('name') . "%")->where('users.is_delete', '0');
+            });
+        }
+        if (!empty($request->get('searchingfield') )) {
+            $data->filter(function ($query) {
+                $query->where('users.user_name', 'like', "%" . request('searchingfield') . "%")->where('users.is_delete', '0');
+                $query->orWhere('users.first_name', 'like', "%" . request('searchingfield') . "%")->where('users.is_delete', '0');
+                $query->orWhere('users.middle_name', 'like', "%" . request('searchingfield') . "%")->where('users.is_delete', '0');
+                $query->orWhere('users.last_name', 'like', "%" . request('searchingfield') . "%")->where('users.is_delete', '0');
+            });
+        }
+        if (!empty($request->get('statusd') )) {
+            $data->filter(function ($query) {
+                $query->where('users.is_enebled', 'like', request('statusd'));
+            });
+        }
         $data->removeColumn('id');
         $data->rawColumns(['user_image', 'action', 'is_enebled', 'checkbox']);
         
