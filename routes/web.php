@@ -17,6 +17,9 @@ Route::get('/', function () {
 Route::get('/register-user', function () {
     return view('register');
 });
+Route::get('/alert-user', function () {
+    return view('alert');
+})->name('alert');
 Route::post('/attempt', 'User\LoginController@attempt')->name('signin.attempt');
 Auth::routes();
 
@@ -37,6 +40,7 @@ Route::post('/user-save', 'User\UserController@store')->name('user_save');
 Route::get('/edit-user/{id}', 'User\UserController@edit')->name('edit_user');
 Route::post('/update-user/{id}', 'User\UserController@updete')->name('update_user');
 Route::get('/delete-user/{id}', 'User\UserController@delete')->name('delete_user');
+Route::post('/delete-users', 'User\UserController@delete2')->name('delete_users');
 Route::get('/get-data-user', ['as'=>'get.datauser','uses'=>'User\UserController@getData']);
 Route::post('/search-data-user', ['as'=>'get.searchdatauser','uses'=>'User\UserController@getCustomFilterData']);
 Route::get('/pdf-user','User\UserController@downloadPDF')->name('pdfuser');
@@ -50,3 +54,4 @@ Route::post('/save-role','User\RoleController@store')->name('rolessave');
 Route::get('/edit-role/{id}','User\RoleController@edit')->name('rolesedit');
 Route::post('/update-role/{id}','User\RoleController@update')->name('rolesupdate');
 Route::get('/delete-role/{id}','User\RoleController@delete')->name('rolesdelete');
+Route::post('/delete-roles','User\RoleController@delete2')->name('rolesdelete2');

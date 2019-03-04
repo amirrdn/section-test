@@ -11,6 +11,8 @@ use App\User;
 use App\Clasess\UserClass;
 use Carbon\Carbon;
 use PDF;
+use DB;
+use Session;
 
 class UserController extends Controller
 {
@@ -40,39 +42,44 @@ class UserController extends Controller
     public function getData(Request $request)
     {
         $user                       = User::join('role', 'users.role_id', 'role.id')->where('users.is_delete', '0')
-                                    ->select('users.id', 'users.user_image', 'users.first_name', 'users.middle_name',
+                                    ->select(['users.id', 'users.user_image', 'users.first_name', 'users.middle_name',
                                     'users.last_name', 'user_name', 'users.role_id', 'users.is_enebled', 'users.email',
-                                    'users.last_login_at', 'role.id as role_id', 'role.role_name');
-        return DataTables::of($user)
+                                    'users.last_login_at', 'role.id as role_id', 'role.role_name']);
+        $data = DataTables::of($user)
         ->filter(function ($query) {
             if (request()->has('name')) {
-                $query->where('users.first_name', 'like', "%" . request('name') . "%");
+                $query->where('users.first_name', 'like', "%" . request('name') . "%")->where('users.is_delete', '0');
             }
             if (request()->has('email')) {
-                $query->where('users.email', 'like', "%" . request('email') . "%");
+                $query->where('users.email', 'like', "%" . request('email') . "%")->where('users.is_delete', '0');
             }
             if (request()->has('user_name')) {
-                $query->where('users.user_name', 'like', "%" . request('user_name') . "%");
+                $query->where('users.user_name', 'like', "%" . request('user_name') . "%")->where('users.is_delete', '0');
             }
             if (request()->has('roles')) {
-                $query->where('users.role_id', 'like', "%" . request('roles') . "%");
+                $query->where('users.role_id', 'like', "%" . request('roles') . "%")->where('users.is_delete', '0');
             }
             if (request()->has('statusd')) {
-                $query->where('users.is_enebled', 'like', "%" . request('status') . "%");
+                $query->where('users.is_enebled', 'like', "%" . request('statusd') . "%")->where('users.is_delete', '0');
+            }
+            if (request()->has('searchingfield')) {
+                $query->where('users.user_name', 'like', "%" . request('searchingfield') . "%")->where('users.is_delete', '0');
+                $query->orWhere('users.first_name', 'like', "%" . request('searchingfield') . "%")->where('users.is_delete', '0');
+                $query->orWhere('users.middle_name', 'like', "%" . request('searchingfield') . "%")->where('users.is_delete', '0');
+                $query->orWhere('users.last_name', 'like', "%" . request('searchingfield') . "%")->where('users.is_delete', '0');
             }
             
 
         })
-       ->addColumn('usernames', function ($user) {
-            return $user->first_name . ' '. $user->last_name;
+        
+        ->addColumn('nomers', function($user) {
+            return $user++;
         })
-        ->addColumn('activity', function ($user) {
-            return $user->last_login_at ;
+        ->addColumn('action', function ($user) {
+            return '<a href="'. route('edit_user', $user->id).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>
+               <a href="'. route('delete_user', $user->id) .'" class="btn btn-xs btn-danger" onclick=\'return confirm("Are you sure want to delete?")\'><i class="glyphicon glyphicon-trash"></i> Delete</a>   ';
         })
-        ->addColumn('role_id', function ($user) {
-            return $user->role_name ;
-        })
-       ->addColumn('image', function ($user) { 
+        ->addColumn('user_image', function ($user) { 
             $url= asset($user->user_image);
             if(!empty($url)){
                 $img    = $url;
@@ -81,12 +88,8 @@ class UserController extends Controller
             }
             return '<img src="'.$img.'" border="0" width="30%" class="img-rounded img-responsive center-block" align="center" />';
         })
-        ->addColumn('nomers', function($user) {
-            return $user++;
-        })
-        ->addColumn('action', function ($user) {
-            return '<a href="'. route('edit_user', $user->id).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>
-               <a href="'. route('delete_user', $user->id) .'" class="btn btn-xs btn-danger" onclick=\'return confirm("Are you sure want to delete?")\'><i class="glyphicon glyphicon-trash"></i> Delete</a>   ';
+        ->addColumn('checkbox', function($user) {
+            return '<input type="checkbox" name="id[]" value="'.$user->id.'">' ;
         })
         ->addColumn('is_enebled', function ($user) {
             if($user->is_enebled == 'yes'){
@@ -95,9 +98,11 @@ class UserController extends Controller
                 $dbs    = '<button class="btn btn-sm btn-default">Disabled</button>';
             }
             return $dbs;
-        })
-        ->rawColumns(['image', 'action', 'is_enebled'])
-        ->toJson();
+        });
+        $data->removeColumn('id');
+        $data->rawColumns(['user_image', 'action', 'is_enebled', 'checkbox']);
+        
+        return $data->toJson();;
     }
     public function edit($id)
     {
@@ -117,6 +122,14 @@ class UserController extends Controller
         $user           = User::FindOrFail($id)->update(array('is_delete'=> 1));
         $request->session()->flash('alert-success', 'was successful delete!');
 		return redirect()->route('user_list');
+    }
+    public function delete2(Request $request)
+    {
+        $id_user        = $request->get('id');
+        $user           = User::whereIn('id',$id_user)->update(['is_delete'=> 1]);
+        $request->session()->flash('alert-success', 'was successful delete!');
+        Session::flash('message', 'This is a message!'); 
+        return response(['msg' => 'deleted']);
     }
     public function downloadPDF(Request $request){
         $role       = $request->get('role_id');

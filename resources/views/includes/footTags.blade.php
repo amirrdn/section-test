@@ -87,12 +87,13 @@
 <script>
   $(document).ready(function() {
     var t = $('#users-table').DataTable( {
-      'paging'      : true,
-      'lengthChange': false,
       'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false,
+      "columnDefs": [ {
+            "searchable": false,
+            "orderable": false,
+            "targets": 1
+        } ],
+        "order": [[ 1, 'asc' ]],
         processing: true,
         serverSide: true,
         ajax: {
@@ -103,27 +104,43 @@
                 d.user_name = $('input[name=user_name]').val();
                 d.roles = $('select[name=roles]').val();
                 d.statusd = $('select[name=status]').val();
+                d.searchingfield = $('input[name=searchingfield]').val();
             }
         },
+        /*
+        'columnDefs': [{
+         'targets': 0,
+         'className': 'dt-body-center',
+         'render': function (data, type, full, meta){
+             return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+         }
+      }],
+      'order': [[1, 'asc']],
+      */
+      
         columns: [
-                    { data: 'nomers', name: 'nomers' },
-                    { data: 'image', name: 'image' },
-                    { data: 'usernames', name: 'usernames' },
-                    { data: 'user_name', name: 'user_name' },
-                    { data: 'role_id', name: 'role_id' },
-                    { data: 'is_enebled', name: 'is_enebled' },
-                    { data: 'email', name: 'email' },
-                    { data: 'activity', name: 'activity' },
+                    //{ data: 'id', name: 'users.id' },
+                    { data: 'checkbox', name: 'checkbox',searchable: true, sortable : false },
+                    { data: 'user_image', name: 'posts.user_image' },
+                    { data: 'user_image', name: 'posts.user_image' },
+                    { data: 'first_name', name: 'users.first_name' },
+                    { data: 'user_name', name: 'users.user_name' },
+                    { data: 'role_name', name: 'users.role_name' },
+                    { data: 'is_enebled', name: 'users.is_enebled' },
+                    { data: 'email', name: 'users.email' },
+                    { data: 'last_login_at', name: 'users.last_login_at' },
                     {data: 'action', name: 'action'}
+                    
 
                 ],
+                
     } );
-   
-    t.on( 'order.dt search.dt', function () {
-        t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-            cell.innerHTML = i+1;
-        } );
-    } ).draw();
+    
+    t.on('order.dt search.dt', function () {
+    t.column(1, {search:'applied'}).nodes().each( function (cell, i) {
+        cell.innerHTML = i+1;
+    });
+}).draw();
       $('#search-form').submit(function(e) {
         
         var name      = $('#name').val();
@@ -148,7 +165,65 @@
       $('input[type=text].status').val($(this).val());
     });
 
+    $('#searchingfield').on('keyup',function(e){
+      var input = $(this);
+      var name      = $('#searchingfield').val();
+      if(input.val().length > 1){
+        $('input[type=text].text_div').val(name);
+        t.draw();
+        e.preventDefault();
+      }else{
+        $('input[type=text].text_div').val(name);
+        t.draw();
+        e.preventDefault();
+      }
+      //input.next("span").text(input.val().length + " chars");
+    });
 
+    $('#example-select-all').click(function (e){
+      // Get all rows with search applied
+      var rows = $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
+      // Check/uncheck checkboxes for all rows in the table
+      $('input[type="checkbox"]', rows).prop('checked', this.checked);
+   });
+
+   $('#frm-example').on('submit', function(e){
+      var form = this;
+      var $button = $(this);
+    
+      // Iterate over all checkboxes in the table
+      $(this).closest('table').find('td input:checkbox').prop('checked', this.checked).each(function(){
+         // If checkbox doesn't exist in DOM
+         if(!$.contains(document, this)){
+            // If checkbox is checked
+            if(this.checked){
+               // Create a hidden element 
+               $(form).append(
+                  $('<input>')
+                     .attr('type', 'hidden')
+                     .attr('name', this.name)
+                     .val(this.value)
+               );
+            }
+         } 
+      });
+
+      $('#example-console').text($(form).serialize()); 
+      e.preventDefault();
+      var formData = $('#frm-example').serialize();
+      $.ajax({
+        url: '{{ route("delete_users") }}',
+        data: formData,
+        type: 'post',
+        dataType: 'json',
+        success: function(data) {
+          $('#users-table').DataTable().ajax.reload()
+          //$('div.flash-message').html(data);
+        }
+    });
+   });
+   
+    
 } );
 
 

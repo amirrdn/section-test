@@ -39,7 +39,9 @@ input[type="text"], input[type="email"] {
                         </div>
                     </div>
                     <div class="box-body">
+                    <li class="delete"></li>
                     <div class="flash-message">
+                   
 							@foreach (['danger', 'warning', 'success', 'info'] as $msg)
 							  @if(Session::has('alert-' . $msg))
 
@@ -47,13 +49,16 @@ input[type="text"], input[type="email"] {
 							  @endif
 							@endforeach
                           </div> 
-                           
+                            
                         <div class="form-group">
-                            <form action="{{ route('pdfuser') }}" method="get" style="display:hidden; margin-right: -20px" class="col-sm-1">
+                            <div class="row">
+                            <div class="col-md-6">
+                            <form action="{{ route('pdfuser') }}" method="get" style="margin-right: 23px" class="col-sm-1">
                                 <input type="text" name="name" class="text_div form-controll" style="display:none">
                                 <input type="text" name="role_id" class="role_id form-controll" style="display:none">
                                 <input type="text" name="email" class="email form-controll" style="display:none">
                                 <input type="text" name="status" class="status form-controll" style="display:none">
+                                <input type="text" name="user_name" class="user_name form-controll" style="display:none">
                                 <input type="text" name="user_name" class="user_name form-controll" style="display:none">
                                 <button formtarget="_blank" type="submit" class="btn btn-default btn-sm">PDF</button>
                             </form>
@@ -65,15 +70,26 @@ input[type="text"], input[type="email"] {
                                 <input type="text" name="user_name" class="user_name form-controll" style="display:none">
                                 <button formtarget="_blank" type="submit" class="btn btn-default btn-sm">Print</button>
                             </form>
+                            </div>
+                            <div class="col-md-4"></div>
+                            <div class="col-md-2">
+                            <div class="form-group ">
+                            <input name="searchingfield" type="text" class="form-control" id="searchingfield">
+                            </div>
+                            </div>
+                            </div>
                         </div>
                         <!--
                             <iframe src="{{ route('userpirnt')}}" name="frame1" style="display:none"></iframe>
                             <button type="button" class="btn btn-default btn-sm" onclick="frames['frame1'].print()">Print</button>
                         -->
-                        <table class="table table-bordered" id="users-table">
+                        <form id="frm-example" method="POST">
+                        {{ csrf_field() }}
+                        <table class="table table-bordered display select"cellspacing="0" width="100%" id="users-table">
                             <thead>
                                 <tr>
-                                    <th>No</th>
+                                    <th><input type="checkbox" name="select_all" value="1" id="example-select-all"></th>
+                                    <th>No.</th>
                                     <th style="width: 16%;">Image</th>
                                     <th>Name</th>
                                     <th>Username</th>
@@ -85,6 +101,8 @@ input[type="text"], input[type="email"] {
                                 </tr>
                             </thead>
                         </table>
+                        <button class="btn btn-danger btn-sm">Delete Checked</button>
+                        </form>
                         <div class="modal fade" id="modal-default">
                             <div class="modal-dialog">
                                 <div class="modal-content">

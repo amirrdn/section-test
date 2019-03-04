@@ -31,15 +31,21 @@
 							  @endif
 							@endforeach
                           </div> 
+                        <form id="frm-example" method="POST">
+                        {{ csrf_field() }}
                         <table class="table table-bordered" id="role-table">
                             <thead>
                                 <tr>
+                                    <th><input type="checkbox" name="select_all" value="1" id="example-select-all"></th>
+                                    <th>No.</th>
                                     <th>Name</th>
-                                    <th>Status</th>
+                                    <th>IsEnabled</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                         </table>
+                        <button class="btn btn-danger btn-sm">Delete Checked</button>
+                        </form>
                         </div>
                     </div>
                 </div>
@@ -54,16 +60,70 @@
 <script src="{{ asset('admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-    $('#role-table').DataTable({
+    var t = $('#role-table').DataTable({
         processing: true,
         serverSide: true,
+        "columnDefs": [ {
+            "searchable": false,
+            "orderable": false,
+            "targets": 1
+        } ],
+        "order": [[ 1, 'asc' ]],
         ajax: '{{ route('rolesdata') }}',
         columns: [
+            {data: 'checkbox', name: 'checkbox',searchable: true, sortable : false},
+            {data: 'id', name: 'id'},
             {data: 'role_name', name: 'role_name'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action'},
         ]
     });
+    t.on('order.dt search.dt', function () {
+        t.column(1, {search:'applied'}).nodes().each( function (cell, i) {
+            cell.innerHTML = i+1;
+        });
+    }).draw();
+
+    $('#example-select-all').click(function (e){
+      var rows = $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
+      $('input[type="checkbox"]', rows).prop('checked', this.checked);
+   });
+
+   $('#frm-example').on('submit', function(e){
+      var form = this;
+      var $button = $(this);
+    
+      // Iterate over all checkboxes in the table
+      $(this).closest('table').find('td input:checkbox').prop('checked', this.checked).each(function(){
+         // If checkbox doesn't exist in DOM
+         if(!$.contains(document, this)){
+            // If checkbox is checked
+            if(this.checked){
+               // Create a hidden element 
+               $(form).append(
+                  $('<input>')
+                     .attr('type', 'hidden')
+                     .attr('name', this.name)
+                     .val(this.value)
+               );
+            }
+         } 
+      });
+
+      $('#example-console').text($(form).serialize()); 
+      e.preventDefault();
+      var formData = $('#frm-example').serialize();
+      $.ajax({
+        url: '{{ route("rolesdelete2") }}',
+        data: formData,
+        type: 'post',
+        dataType: 'json',
+        success: function(data) {
+          $('#role-table').DataTable().ajax.reload()
+          //$('div.flash-message').html(data);
+        }
+    });
+});
 });
 </script>
 @endsection

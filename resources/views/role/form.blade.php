@@ -3,19 +3,21 @@
         <div class="box-body">
             <div class="form-group">
                 <label for="inputWarning">Role Name<span class="dengertext">*</span></label>
-                {!! Form::text('role_name', null, array('required' => 'required', 'autofocus' => 'autofocus','placeholder' => 'Role Name','class' => 'form-control', 'data-error' => 'This role name field is required')) !!}
+                {!! Form::text('role_name', null, array('required' => 'required', 'autofocus' => 'autofocus','placeholder' => 'Enter Role Name','class' => 'form-control', 'data-error' => 'This role name field is required')) !!}
                 <div class="help-block with-errors"></div>
            </div>
            <div class="form-group">
                 <label for="dob">Is Enebled <span class="dengertext">*</span></label>
-                <div class="form-group">
+                <div class="radio">
+                <label>
                     {!! Form::radio('role_status', '1', ['class'=>'flat-red']) !!}
-                <label>Enebled
+                Enebled
                     </label>
                 </div>
-                <div class="form-group">
+                <div class="radio">
+                <label>
                     {!! Form::radio('role_status', '0', ['class'=>'flat-red']) !!}
-                <label>Disabled
+                Disabled
                 </label>
                 </div>
             </div>

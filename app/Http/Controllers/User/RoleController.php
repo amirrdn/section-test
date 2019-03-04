@@ -46,13 +46,16 @@ class RoleController extends Controller
         })
         ->addColumn('status', function ($role) {
             if($role->role_status == '1'){
-                $dbs    = '<a type="button" class="btn btn-xs btn-primary">Enebled</button>';
+                $dbs    = 'Yes';
             }else{
-                $dbs    = '<a type="button" class="btn btn-xs btn-danger">Disabled</button>';
+                $dbs    = 'No';
             }
             return $dbs;
         })
-        ->rawColumns(['action', 'status'])
+        ->addColumn('checkbox', function($role) {
+            return '<input type="checkbox" name="id[]" value="'.$role->id.'">' ;
+        })
+        ->rawColumns(['action', 'status', 'checkbox'])
         ->make(true);
     }
     public function edit($id)
@@ -79,5 +82,13 @@ class RoleController extends Controller
 
         $request->session()->flash('alert-success', 'was successful insert!');
 		return redirect()->route('roles');
+    }
+    public function delete2(Request $request)
+    {
+        $id_role                    = $request->get('id');
+        $role                       = MRole::whereIn('id', $id_role)->update(['role_status'=> 0]);
+
+        $request->session()->flash('alert-success', 'was successful insert!');
+		return response(['msg' => 'deleted']);
     }
 }
