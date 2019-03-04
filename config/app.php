@@ -167,6 +167,7 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         Elibyy\TCPDF\ServiceProvider::class,
         Sentry\Laravel\ServiceProvider::class,
+        Rollbar\Laravel\RollbarServiceProvider::class,
         /*
          * Package Service Providers...
          */
