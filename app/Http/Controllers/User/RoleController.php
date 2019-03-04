@@ -69,6 +69,7 @@ class RoleController extends Controller
         $role->role_status          = $request->role_status;
 
         $role->save();
+        \Log::debug('Here is some debug information');
         $request->session()->flash('alert-success', 'was successful insert!');
 		return redirect()->route('roles');
     }
