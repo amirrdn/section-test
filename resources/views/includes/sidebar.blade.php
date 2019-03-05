@@ -1,5 +1,6 @@
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
+    
     <section class="sidebar">
       <!-- Sidebar user panel -->
       <div class="user-panel">
@@ -41,7 +42,8 @@
             <li><a href="{{ route('addcust') }}"><i class="fa fa-circle-o"></i> Add</a></li>
           </ul>
         </li>
-
+        @role('Admin')
+        @if (auth()->user()->can('user view') || auth()->user()->can('Delete') || auth()->user()->can('Create'))
         <li class="treeview">
           <a href="#">
             <i class="fa fa-users"></i> <span>User</span>
@@ -52,9 +54,11 @@
           <ul class="treeview-menu">
             <li><a href="{{ route('user_list') }}"><i class="fa fa-circle-o"></i> Index</a></li>
             <li><a href="{{ route('addcust') }}"><i class="fa fa-circle-o"></i> Add</a></li>
+            <li><a href="{{ route('users.roles_permission') }}"><i class="fa fa-circle-o"></i> Set Pe</a></li>
           </ul>
         </li>
-
+        @endif
+        @endrole
         <li class="treeview">
           <a href="#">
             <i class="fa fa-users"></i> <span>Roles</span>

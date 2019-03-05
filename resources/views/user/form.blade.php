@@ -118,7 +118,7 @@
             </div>
             <div class="form-group">
                 <label for="name">Role <span class="dengertext">*</span></label>
-                {!! Form::select('role_id',$role_id,null,['class' => 'form-control', 'placeholder' => 'Please Select']) !!}
+                {!! Form::select('role',$role_id,null,['class' => 'form-control', 'placeholder' => 'Please Select']) !!}
             </div> 
             <div class="form-group">
                 <label for="dob">Picture <span class="dengertext">*</span></label>

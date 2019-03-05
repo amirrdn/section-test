@@ -125,7 +125,7 @@
                     { data: 'user_image', name: 'posts.user_image' },
                     { data: 'first_name', name: 'users.first_name' },
                     { data: 'user_name', name: 'users.user_name' },
-                    { data: 'role_name', name: 'users.role_name' },
+                    { data: 'role', name: 'role' },
                     { data: 'is_enebled', name: 'users.is_enebled' },
                     { data: 'email', name: 'users.email' },
                     { data: 'last_login_at', name: 'users.last_login_at' },

@@ -46,6 +46,13 @@ Route::post('/search-data-user', ['as'=>'get.searchdatauser','uses'=>'User\UserC
 Route::get('/pdf-user','User\UserController@downloadPDF')->name('pdfuser');
 Route::get('/print-user','User\UserController@print')->name('userpirnt');
 
+Route::get('/users/index', 'User\UserController@showuser')->name('usersshow');
+Route::put('/users/roles/{id}', 'User\UserController@setRole')->name('users.set_role');
+Route::post('/users/permission', 'User\UserController@addPermission')->name('users.add_permission');
+Route::get('/users/role-permission', 'User\UserController@rolePermission')->name('users.roles_permission');
+Route::put('/users/permission/{role}', 'User\UserController@setRolePermission')->name('users.setRolePermission');
+Route::get('/users/roles/{id}', 'User\UserController@roles')->name('users.roles');
+
 /* Role */
 Route::get('/index-role','User\RoleController@index')->name('roles');
 Route::get('/get-role','User\RoleController@show')->name('rolesdata');
@@ -58,3 +65,14 @@ Route::post('/delete-roles','User\RoleController@delete2')->name('rolesdelete2')
 
 /* Role Module */
 Route::post('/role-permission','Module\RoleModuleController@index')->name('rolesmodule');
+
+Route::get('/users/role', 'RoleController@index')->name('rolegroup');
+Route::get('/users/create-role', 'RoleController@create')->name('createrolegroup');
+Route::post('/users/save-role', 'RoleController@store')->name('saverolegroup');
+Route::get('/users/edit-role', 'RoleController@edit')->name('editrolegroup');
+Route::post('/users/delete-role', 'RoleController@destroy')->name('deleterolegroup');
+/*
+Route::resource('/role', 'RoleController')->except([
+    'create', 'show', 'edit', 'update'
+]);
+*/

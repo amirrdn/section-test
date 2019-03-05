@@ -168,6 +168,7 @@ return [
         Elibyy\TCPDF\ServiceProvider::class,
         Sentry\Laravel\ServiceProvider::class,
         Rollbar\Laravel\RollbarServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
         /*
          * Package Service Providers...
          */

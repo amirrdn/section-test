@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use Yajra\Datatables\Datatables;
 
 use App\User;
+use App\Models\MPages;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 use App\Clasess\UserClass;
 use Carbon\Carbon;
@@ -29,7 +32,7 @@ class UserController extends Controller
     }
     public function create()
     {
-        $role_id                    = $this->user->pluckRoles();
+        $role_id                    = Role::all()->pluck('name');
 
         return view('user.add', compact('role_id'));
     }
@@ -226,5 +229,66 @@ class UserController extends Controller
             $user = $user1->get();
         }
         return view('user.print', compact('user'));
+    }
+    public function roles(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $roles = Role::all()->pluck('name');
+        return view('user.roles', compact('user', 'roles'));
+    }
+    public function setRole(Request $request, $id)
+    {
+        $this->validate($request, [
+            'role' => 'required'
+        ]);
+        $user = User::findOrFail($id);
+        $user->syncRoles($request->role);
+        return redirect()->back()->with(['success' => 'Role Sudah Di Set']);
+    }
+    public function rolePermission(Request $request)
+    {
+        $role = $request->get('role');
+        $permissions = null;
+        $hasPermission = null;
+        $roles = Role::all()->pluck('name');
+        $pages = Permission::select('name', 'id')->where('parent_id', 0)->get();
+        if (!empty($role)) {
+            $getRole = Role::findByName($role);
+            $hasPermission = DB::table('role_has_permissions')
+                ->select('permissions.name', 'permissions.parent_id')
+                ->join('permissions', 'role_has_permissions.permission_id', '=', 'permissions.id')
+                //->where('role_id', $getRole->id)->get()->pluck('name', 'page_id')->all();
+                ->where('role_id', $getRole->id)->get()->pluck('name')->all();
+            $permissions = Permission::where('permissions.parent_id', 0)->get();
+            $permissions1 = new UserClass;
+        }
+        return view('user.role_permission', compact('roles', 'permissions', 'hasPermission', 'permissions1', 'pages'));
+    }
+    public function addPermission(Request $request)
+    {
+        $this->validate($request, [
+            //'name' => 'required|string|unique:permissions'
+            'name' => 'required|string'
+        ]);
+        $name_permission = Permission::where('id', $request->parent_id)->get();
+        $b_name = $name_permission->first()->name;
+        $permission = Permission::firstOrCreate([
+            'name' => strtolower($b_name .' '. $request->name),
+            'parent_id' => $request->parent_id
+        ]);
+        return redirect()->back();
+    }
+    public function setRolePermission(Request $request, $role)
+    {
+        //return $request->permission;
+        $role = Role::findByName($role);
+        //$role = $role->where('parent_id', 0);
+        $role->syncPermissions($request->permission);
+        return redirect()->back()->with(['success' => 'Permission to Role Saved!']);
+    }
+    public function showuser()
+    {
+        $users = User::orderBy('created_at', 'DESC')->paginate(10);
+        return view('user.index2', compact('users'));
     }
 }

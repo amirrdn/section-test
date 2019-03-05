@@ -5,7 +5,10 @@ namespace App\Clasess;
 use Illuminate\Http\Request;
 use App\User;
 use App\Models\MRole;
+use App\Models\MPages;
+use Spatie\Permission\Models\Permission;
 
+use Spatie\Permission\Models\Role;
 use File;
 use Illuminate\Support\Facades\Input;
 
@@ -67,11 +70,12 @@ class UserClass {
         $user->merital_status       = $request->merital_status;
         $user->user_name            = $request->user_name;
         $user->is_enebled           = $request->is_enebled;
-        $user->role_id              = $request->role_id;
+        $user->role_id              = 0;
         $user->user_image           = $post_imgs;
+        $user->role                 = $request->role;
 
         $user->save();
-
+        $user->assignRole($request->role);
         return $user;
     }
     public function CreateUser(Request $request)
@@ -111,11 +115,23 @@ class UserClass {
         $user->merital_status       = $request->merital_status;
         $user->user_name            = $request->user_name;
         $user->is_enebled           = $request->is_enebled;
-        $user->role_id              = $request->role_id;
+        $user->role_id              = 0;
         $user->user_image           = $post_imgs;
+        $user->role                 = $request->role;
 
         $user->save();
-
+        $user->assignRole($request->role);
         return $user;
+    }
+    Public function getPage($name)
+    {
+        $pages  = Permission::join('pages', 'permissions.page_id', 'pages.id')->where('permissions.name','like', $name)->groupBy('pages.id');
+        if(!empty($pages)){
+            return $pages->get();
+        }
+    }
+    public function permis($name)
+    {
+        return Permission::where('parent_id',  $name)->pluck('name');
     }
 }
