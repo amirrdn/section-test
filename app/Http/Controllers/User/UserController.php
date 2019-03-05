@@ -141,7 +141,7 @@ class UserController extends Controller
         $request->session()->flash('alert-success', 'was successful Update!');
 		return redirect()->route('user_list');
     }
-    public function delete($id)
+    public function delete(Request $request,$id)
     {
         $user           = User::FindOrFail($id)->update(array('is_delete'=> 1));
         $request->session()->flash('alert-success', 'was successful delete!');

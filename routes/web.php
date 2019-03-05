@@ -55,3 +55,6 @@ Route::get('/edit-role/{id}','User\RoleController@edit')->name('rolesedit');
 Route::post('/update-role/{id}','User\RoleController@update')->name('rolesupdate');
 Route::get('/delete-role/{id}','User\RoleController@delete')->name('rolesdelete');
 Route::post('/delete-roles','User\RoleController@delete2')->name('rolesdelete2');
+
+/* Role Module */
+Route::post('/role-permission','Module\RoleModuleController@index')->name('rolesmodule');
