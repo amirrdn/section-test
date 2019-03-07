@@ -37,7 +37,7 @@
                                 <table class="table table-hover" id="role-table">
                                     <thead>
                                         <tr>
-                                            <td>#</td>
+                                            <td><input type="checkbox" name="select_all" value="1" id="example-select-all"></td>
                                             <td>Role</td>
                                             <td>Guard</td>
                                             <td>status</td>
@@ -79,8 +79,8 @@ $(document).ready(function() {
             {data: 'checkbox', name: 'checkbox',searchable: true, sortable : false},
             {data: 'id', name: 'id'},
             {data: 'name', name: 'name'},
-            {data: 'guard_name', name: 'guard_name'},
             {data: 'status', name: 'status'},
+            {data: 'created_at', name: 'created_at'},
             {data: 'action', name: 'action'},
         ]
     });

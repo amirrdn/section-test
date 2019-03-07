@@ -34,9 +34,9 @@ class UserController extends Controller
     }
     public function create()
     {
-        $role_id                    = Role::all()->pluck('name');
-
-        return view('user.add', compact('role_id'));
+        $roles                    = Role::select('name', 'id')->get();
+        $idrole                     = 0;
+        return view('user.add', compact('roles', 'idrole'));
     }
     public function store(Request $request)
     {
@@ -248,20 +248,22 @@ class UserController extends Controller
         $hasPermission = null;
         $roles = Role::all()->pluck('name');
         $pages = Permission::select('name', 'id')->where('parent_id', 0)->get();
-        if (!empty($role)) {
+        if (!empty($role) || $request->ajax()) {
             $getRole = Role::findByName($role);
             $hasPermission = DB::table('role_has_permissions')
                 ->select('permissions.name')
                 ->join('permissions', 'role_has_permissions.permission_id', '=', 'permissions.id')
-                //->where('role_id', $getRole->id)->get()->pluck('name', 'page_id')->all();
                 ->where('role_id', $getRole->id)->get()->pluck('name')->all();
-           // $permissions = Permission::where('permissions.parent_id', 0)->get();
            $permissions = MModules::select('id','module_names')->get();
 
             $permissions1 = new UserClass;
+            
         }
+        $roles_name                  = Role::select('name', 'id')->get();
+        $module_td                   = MModules::all();
+        $getddataroles               = new UserClass;
         //return json_encode($permissions);
-        return view('user.role_permission', compact('roles', 'permissions', 'hasPermission', 'permissions1', 'pages'));
+        return view('role.permission_role', compact('roles_name','module_td','getddataroles','roles', 'permissions', 'hasPermission', 'permissions1', 'pages'));
     }
     public function addPermission(Request $request)
     {
@@ -288,6 +290,7 @@ class UserController extends Controller
         
         //$permission = Permission::where('name','like','%' . $request->permission .'%')->first()->name;
         $permission     = Permission::query();
+        //$pemission->where('module',)
         if($request->permission > 1){
             foreach($request->permission as $word){
                 $permission->orWhere('name', 'LIKE', '%'.$word.'%');
@@ -297,9 +300,8 @@ class UserController extends Controller
         }
         $permission = $permission->distinct()->pluck('name');
         //return json_encode($permission);
-        $admin_role->syncPermissions($permission);
-
-        return redirect()->back()->with(['success' => 'Permission to Role Saved!']);
+        $admin_role->givePermissionTo($permission);
+        return \Redirect::to('/users/role-permission?role='.$request->get('role'));
     }
     public function showuser()
     {

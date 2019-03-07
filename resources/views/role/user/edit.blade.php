@@ -22,6 +22,7 @@
                     <form action="{{ route('users.setRolePermission', request()->get('role')) }}" method="post">
                     @csrf
                     <input type="hidden" name="_method" value="PUT">
+                    <input type="text" name="idrole" value="{{ $roles}}">
                         @include('role.user.form')
                     </form>
                 </div>

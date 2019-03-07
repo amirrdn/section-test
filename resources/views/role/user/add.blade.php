@@ -4,11 +4,11 @@
 <div class="content-wrapper">
     <section class="content-header">
       <h1>
-        Roles
+      ROLE PERMISSIONS
       </h1>
       <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="{{ route('roles') }}">Roles</a></li>
+        <li><a href="{{ route('users.roles_permission') }}">Role Permissions</a></li>
         <li class="active">Create Roles</li>
       </ol>
     </section>
@@ -17,7 +17,7 @@
             <div class="col-md-12">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Add Roles</h3>
+                        <h3 class="box-title">Add Role Permission</h3>
                     </div>
                     <meta name="_token" content="{{ csrf_token() }}" /> 
 						{{ method_field('post') }}

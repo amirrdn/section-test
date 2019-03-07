@@ -16,16 +16,17 @@ input[type="text"], input[type="email"] {
     margin-top: -43px;
 }
 .xlp{
-    margin-right: -84px;
+    margin-right: -51px;
     margin-bottom: -86px;
 }
 .frm-example{
     margin-top: -100px;
 }
 .xl-print{
-    margin-right: -52px;
-    float: right;
+    float: left;
     margin-bottom: 8px;
+    margin-left: 116px;
+    margin-right: -73px;
 }
 .xl-input{
     margin-bottom: -10px;
@@ -52,14 +53,14 @@ input[type="text"], input[type="email"] {
                         <h3 class="box-title">Users List</h3>
                         </div>
                         <div class="col-md-2 form-group xl-print">
-                        <form action="{{ route('pdfuser') }}" method="get" style="margin-right: 23px" class="col-sm-1">
+                        <form action="{{ route('pdfuser') }}" method="get" style="margin-right: 36px" class="col-sm-1">
                                 <input type="text" name="name" class="text_div form-controll" style="display:none">
                                 <input type="text" name="role_id" class="role_id form-controll" style="display:none">
                                 <input type="text" name="email" class="email form-controll" style="display:none">
                                 <input type="text" name="status" class="status form-controll" style="display:none">
                                 <input type="text" name="user_name" class="user_name form-controll" style="display:none">
                                 <input type="text" name="user_name" class="user_name form-controll" style="display:none">
-                                <button formtarget="_blank" type="submit" class="btn btn-default btn-sm">PDF</button>
+                                <button formtarget="_blank" type="submit" class="btn btn-primary btn-sm">PDF</button>
                             </form>
                             <form action="{{ route('userpirnt') }}" method="get">
                                 <input type="text" name="name" class="text_div form-controll" style="display:none">
@@ -67,7 +68,7 @@ input[type="text"], input[type="email"] {
                                 <input type="text" name="email" class="email form-controll" style="display:none">
                                 <input type="text" name="status" class="status form-controll" style="display:none">
                                 <input type="text" name="user_name" class="user_name form-controll" style="display:none">
-                                <button formtarget="_blank" type="submit" class="btn btn-default btn-sm">Print</button>
+                                <button formtarget="_blank" type="submit" class="btn btn-primary btn-sm">Print</button>
                             </form>
                         </div>
                         <div class="col-md-2 form-group pull-right xlp">

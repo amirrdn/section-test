@@ -79,9 +79,38 @@
 		$('#pswd_info').hide();
     $('#submit').prop('disabled',false);
 	});
+
+  $('#insertrole').on('submit',function(e){
+    e.preventDefault();
+      var formData = $('#insertrole').serialize();
+      swal({
+        title: "Are you sure?",
+        //text: "You will not be able to recover this imaginary file!",
+        type: "info",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, update it!",
+        closeOnConfirm: false
+    }, function (isConfirm) {
+        if (!isConfirm) return;
+        $.ajax({
+            url: '{{ route("setroles") }}',
+            data: formData,
+            type: 'post',
+            dataType: "html",
+            success: function () {
+                swal("Done!", "It was succesfully update permissions!", "success");
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                swal("Error update!", "Please try again", "error");
+            }
+        });
+    });;
+});
 	
 });
 </script>
+
 @if(Request::is('user-list'))
 
 <script>
@@ -233,6 +262,7 @@
 
 </script>
 @endif
+
 <script src="{{ asset('admin/bower_components/moment/min/moment.min.js') }}"></script>
 
 @if(Request::is('') )
@@ -261,5 +291,6 @@
 <script src="{{ asset('admin/bower_components/jquery-knob/dist/jquery.knob.min.js') }}"></script>
 
 <script src="{{ asset('admin/dist/js/pages/dashboard.js') }}"></script>
+
 
 @endif

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
@@ -70,5 +71,13 @@ class RoleController extends Controller
 		return response(['msg' => 'deleted']);
         //$role->delete();
         //return redirect()->back()->with(['success' => 'Role: <strong>' . $role->name . '</strong> Dihapus']);
+    }
+    public function setRoles(Request $request)
+    {
+        $role = Role::findByName($request->role);
+        $role->syncPermissions($request->permission);
+        $request->session()->flash('alert-success', 'was successful set permissions!');
+        //return redirect()->back()->with(['success' => 'Permission to Role Saved!']);
+        //return \Redirect::to('/users/role-permission?role='.$request->get('role'));
     }
 }

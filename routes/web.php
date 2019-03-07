@@ -50,13 +50,13 @@ Route::get('/users/index', 'User\UserController@showuser')->name('usersshow');
 Route::put('/users/roles/{id}', 'User\UserController@setRole')->name('users.set_role');
 Route::post('/users/permission', 'User\UserController@addPermission')->name('users.add_permission');
 Route::get('/users/role-permission', 'User\UserController@rolePermission')->name('users.roles_permission');
-Route::put('/users/permission/{role}', 'User\UserController@setRolePermission')->name('users.setRolePermission');
+Route::put('/users/permission', 'User\UserController@setRolePermission')->name('users.setRolePermission');
 Route::get('/users/roles/{id}', 'User\UserController@roles')->name('users.roles');
 
 Route::get('/users/add-permission', 'User\UserRolesController@create')->name('permissionadd');
 Route::post('/users/save-permission', 'User\UserRolesController@store')->name('permissionsave');
 Route::get('/users/edit-permission/{id}', 'User\UserRolesController@edit')->name('permissionedit');
-
+ 
 
 /* Role */
 Route::get('/index-role','User\RoleController@index')->name('roles');
@@ -77,6 +77,7 @@ Route::post('/users/save-role', 'RoleController@store')->name('saverolegroup');
 Route::get('/users/edit-role', 'RoleController@edit')->name('editrolegroup');
 Route::post('/users/update-role/{id}', 'RoleController@update')->name('updatetrolegroup');
 Route::post('/users/delete-role', 'RoleController@destroy')->name('deleterolegroup');
+Route::put('/users/set-rolepermisson', 'RoleController@setRoles')->name('setroles');
 /*
 Route::resource('/role', 'RoleController')->except([
     'create', 'show', 'edit', 'update'

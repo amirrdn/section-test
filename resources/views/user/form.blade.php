@@ -3,7 +3,7 @@
         <div class="box-body">
             <div class="form-group">
                 <label for="inputWarning">First Name<span class="dengertext">*</span></label>
-                {!! Form::text('first_name', null, array('required' => 'required', 'autofocus' => 'autofocus','placeholder' => 'Enter First Name','class' => 'form-control', 'data-error' => 'This first name field is required')) !!}
+                {!! Form::text('first_name', null, array('required' => 'required', 'autofocus' => 'autofocus','placeholder' => 'Enter first name','class' => 'form-control', 'data-error' => 'This first name field is required')) !!}
                 <div class="help-block with-errors"></div>
            </div>
            <div class="form-group">
@@ -11,29 +11,29 @@
                 {!! Form::text('middle_name', null, array('autofocus' => 'autofocus','placeholder' => 'Enter Middle Name','class' => 'form-control')) !!}
             </div>
             <div class="form-group">
-                <label for="last_name" class="text-danger">Last Name<span class="dengertext">*</span></label>
-                {!! Form::text('last_name', null, array('required' => 'required', 'autofocus' => 'autofocus','placeholder' => 'Enter Last Name','class' => 'form-control is-valid', 'id' => 'last_name')) !!}
+                <label for="last_name">Last Name<span class="dengertext">*</span></label>
+                {!! Form::text('last_name', null, array('required' => 'required', 'autofocus' => 'autofocus','placeholder' => 'Enter last name','class' => 'form-control is-valid', 'id' => 'last_name')) !!}
                 <div class="help-block with-errors"></div>
             </div>
             <div class="form-group">
                 <label for="dob">Identity No#</label>
-                {!! Form::text('indetity_no', null, array('autofocus' => 'autofocus','placeholder' => 'Enter Identity No','class' => 'form-control', 'data-error' => 'This last name field is required')) !!}
+                {!! Form::text('indetity_no', null, array('autofocus' => 'autofocus','placeholder' => 'Enter identity no','class' => 'form-control', 'data-error' => 'This last name field is required')) !!}
             </div>
             <div class="form-group">
                 <label for="dob">Mobile</label>
-                {!! Form::text('mobile_phone', null, array('autofocus' => 'autofocus','placeholder' => 'Enter Mobile','class' => 'form-control')) !!}
+                {!! Form::text('mobile_phone', null, array('autofocus' => 'autofocus','placeholder' => 'Enter mobile','class' => 'form-control')) !!}
             </div>
             <div class="form-group">
                 <label for="dob">Telephone</label>
-                {!! Form::text('telephon', null, array('autofocus' => 'autofocus','placeholder' => 'Enter Telephon','class' => 'form-control')) !!}
+                {!! Form::text('telephon', null, array('autofocus' => 'autofocus','placeholder' => 'Enter telephon','class' => 'form-control')) !!}
             </div>
             <div class="form-group">
                 <label for="dob">Date Of Birth</label>
-                {!! Form::text('date_birth_day', null, array('autofocus' => 'autofocus','placeholder' => 'Enter Date Of Birth','class' => 'form-control', 'data-inputmask' => '"alias": "dd/mm/yyyy"', 'data-mask' => 'data-mask', 'id' => 'datemask')) !!}
+                {!! Form::text('date_birth_day', null, array('autofocus' => 'autofocus','placeholder' => 'Enter date of birth','class' => 'form-control', 'data-inputmask' => '"alias": "dd/mm/yyyy"', 'data-mask' => 'data-mask', 'id' => 'datemask')) !!}
             </div>
             <div class="form-group">
                 <label for="dob">Quatification</label>
-                {!! Form::text('quatification', null, array('placeholder' => 'Enter Quatification','class' => 'form-control')) !!}
+                {!! Form::text('quatification', null, array('placeholder' => 'Enter quatification','class' => 'form-control')) !!}
             </div>
             <div class="form-group">
                 <label for="dob">Select Gender</label>
@@ -77,17 +77,17 @@
             </div>
             <div class="form-group">
                 <label for="dob">Email <span class="dengertext">*</span></label>
-                {!! Form::text('email', null, array('required' => 'required', 'autofocus' => 'autofocus','placeholder' => 'Enter Email','class' => 'form-control', 'data-error' => 'This email field is required')) !!}
+                {!! Form::text('email', null, array('required' => 'required', 'autofocus' => 'autofocus','placeholder' => 'Enter email','class' => 'form-control', 'data-error' => 'This email field is required')) !!}
                 <div class="help-block with-errors"></div>
             </div>
             <div class="form-group">
                 <label for="dob">User Name<span class="dengertext">*</span></label>
-                {!! Form::text('user_name', null, array('required' => 'required', 'autofocus' => 'autofocus','placeholder' => 'Enter User Name','class' => 'form-control', 'data-error' => 'This user name field is required')) !!}
+                {!! Form::text('user_name', null, array('required' => 'required', 'autofocus' => 'autofocus','placeholder' => 'Enter user name','class' => 'form-control', 'data-error' => 'This user name field is required','autocomplete' => 'new-user')) !!}
                 <div class="help-block with-errors"></div>
             </div>
             <div class="form-group">
                 <label for="dob">Password <span class="dengertext">*</span></label>
-                <input type="password" class="form-control" id="password" name="passwords" placeholder="Password" value="">
+                <input type="password" class="form-control" id="password" name="passwords" placeholder="Password" value="" autocomplete="new-password">
                 <div id="pswd_info">
 						<span id="letter" class="invalid">At least <strong>one letter</strong></span>
 						<span id="capital" class="invalid">At least <strong>one capital letter</strong></span>

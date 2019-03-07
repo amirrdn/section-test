@@ -1,15 +1,30 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+.dot-danger {
+    background-color: red;
+}
+.dot {
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    text-align: center;
+    position: center;
+}
+.dot-success {
+    background-color: green;
+}
+</style>
 <div class="content-wrapper">
     <section class="content-header">
       <h1>
-        Users
+      ROLE PERMISSIONS oke
       </h1>
       <ol class="breadcrumb">
         <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="{{ route('roles') }}">Roles</a></li>
-        <li class="active">Edit Roles</li>
+        <li><a href="{{ route('roles') }}">Roles Permissions List</a></li>
       </ol>
     </section>
     <section class="content">
@@ -17,7 +32,7 @@
             <div class="col-md-12">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Update Roles</h3>
+                        <h3 class="box-title">Roles Permissions List</h3>
                     </div>
                     <form action="{{ route('users.roles_permission') }}" method="GET">
                     <div class="row">
@@ -25,6 +40,9 @@
                         <div class="col-md-4">
                             <div class="box-body">
                                 <div class="form-group">
+                                    <a href="{{route('permissionadd') }}" class="btn btn-sm btn-primary pull-right">Create</a>
+                                </div>
+                                <div class="form-group" style="clear:both;margin-top: 38px;">
                                     <label for="" class="col-md-4">Roles</label>
                                     <div class="input-group">
                                         <select name="role" class="col-md-8 form-control">
@@ -39,23 +57,31 @@
                                 </div>
                             </div>
                         </div>
+                    </form>
                         <div class="col-md-12">
                             <div class="box-body">
+                            <div class="flash-message">
+							@foreach (['danger', 'warning', 'success', 'info'] as $msg)
+							  @if(Session::has('alert-' . $msg))
+
+							  <p class="alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }} <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
+							  @endif
+							@endforeach
+                          </div> 
                             @if (!empty($permissions))
-                                <form action="{{ route('users.setRolePermission', request()->get('role')) }}" method="post">
+                            <form method="post" action="{{ route('setroles') }}">
                                     @csrf
-                                    <input type="hidden" name="_method" value="PUT">
                                     <table class="table">
                                         <thead>
                                             <tr>
                                                 <th>Module</th>
-                                                <th>Can View</th>
-                                                <th>Can Create</th>
-                                                <th>Can Edit</th>
-                                                <th>Can Delete</th>
-                                                <th>Can Print</th>
-                                                <th>Can Export</th>
-                                                <th>Action</th>
+                                                <th class="text-center">Can View</th>
+                                                <th class="text-center">Can Create</th>
+                                                <th class="text-center">Can Edit</th>
+                                                <th class="text-center">Can Delete</th>
+                                                <th class="text-center">Can Print</th>
+                                                <th class="text-center">Can Export</th>
+                                                <th class="text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -63,21 +89,36 @@
                                             <tr>
                                                 <td>{{ $row->module_names }}</td>
                                                  @foreach($permissions1->permis($row->id) as $cey => $bs)
-                                                <td><input type="checkbox" name="permission[]" class="dot dot-success" value="{{ $bs }}"
+                                                <td>
+                                                <?php 
+                                                    if(in_array($bs, $hasPermission) ? 'checked':''){
+                                                        $is_enebled = 'dot dot-success col-md-offset-5';
+                                                    }else{
+                                                        $is_enebled = 'dot dot-danger col-md-offset-5';
+                                                    }
+                                                ?>
+                                                    <input type="checkbox" id="optionsRadios1" name="permission[]" class="{{ $is_enebled }}" value="{{ $bs }}"
                                                             {{ in_array($bs, $hasPermission) ? 'checked':'' }}> {{ $bs }}
                                                 </td>
                                                 @endforeach
                                                 <td>
-                                                    <a href="<?php echo url('/users/edit-permission/'.$row->id.'?role='.request()->get('role'));?>">Edit</a>
+                                                    <a class="btn btn-xs btn-success col-md-offset-5" href="<?php echo url('/users/edit-permission/'.$row->id.'?role='.request()->get('role'));?>">Edit</a>
                                                 </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-                            @endif
+                                    <div class="pull-right">
+                                    
+                                    <input type="hidden" name="role" value="<?php echo request()->get('role'); ?>">
+                                        <button type="submit" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-send"></i> Set Permission
+                                        </button>
+                                    </form>
+                                    </div>
                             </div>
                         <div>
-                    </form>
+                            @endif
                 </div>
             </div>
         </div>

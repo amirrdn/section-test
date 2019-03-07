@@ -54,7 +54,6 @@
           <ul class="treeview-menu">
             <li><a href="{{ route('user_list') }}"><i class="fa fa-circle-o"></i> Index</a></li>
             <li><a href="{{ route('addcust') }}"><i class="fa fa-circle-o"></i> Add</a></li>
-            <li><a href="{{ route('users.roles_permission') }}"><i class="fa fa-circle-o"></i> Set Pe</a></li>
           </ul>
         </li>
         @endif
@@ -69,6 +68,7 @@
           <ul class="treeview-menu">
             <li><a href="{{ route('rolegroup') }}"><i class="fa fa-circle-o"></i> Index</a></li>
             <li><a href="{{ route('rolescreate') }}"><i class="fa fa-circle-o"></i> Add</a></li>
+            <li><a href="{{ route('users.roles_permission') }}"><i class="fa fa-circle-o"></i>Roles Permissions</a></li>
           </ul>
         </li>
 

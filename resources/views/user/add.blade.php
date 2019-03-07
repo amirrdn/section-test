@@ -21,7 +21,7 @@
                     </div>
                     <meta name="_token" content="{{ csrf_token() }}" /> 
 						{{ method_field('post') }}
-						{!! Form::open(['method' => 'POST','route' => ['user_save'], 'files'=> 'true','role' => 'form', 'data-toggle' => 'validator', 'novalidate' => 'true', 'enctype' => 'multipart/form-data'])  !!}
+						{!! Form::open(['autocomplete'=> 'of','method' => 'POST','route' => ['user_save'], 'files'=> 'true','role' => 'form', 'data-toggle' => 'validator', 'novalidate' => 'true', 'enctype' => 'multipart/form-data'])  !!}
 						{{ csrf_field() }}
 						@include('user.form')
 						{!! Form::close() !!}
