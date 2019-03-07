@@ -15,6 +15,21 @@ input[type="text"], input[type="email"] {
     text-align: right;
     margin-top: -43px;
 }
+.xlp{
+    margin-right: -84px;
+    margin-bottom: -86px;
+}
+.frm-example{
+    margin-top: -100px;
+}
+.xl-print{
+    margin-right: -52px;
+    float: right;
+    margin-bottom: 8px;
+}
+.xl-input{
+    margin-bottom: -10px;
+}
 </style>
 
 <div class="content-wrapper">
@@ -32,28 +47,12 @@ input[type="text"], input[type="email"] {
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
+                        <div class="row">
+                        <div class="col-md-8">
                         <h3 class="box-title">Users List</h3>
-                        <div class="form-group pull-right">
-                            <a href="{{ route('user_create') }}" class="btn btn-sm btn-primary">Create</a>
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default"><i class="fa fa-fw fa-filter"></i></button>
                         </div>
-                    </div>
-                    <div class="box-body">
-                    <li class="delete"></li>
-                    <div class="flash-message">
-                   
-							@foreach (['danger', 'warning', 'success', 'info'] as $msg)
-							  @if(Session::has('alert-' . $msg))
-
-							  <p class="alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }} <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
-							  @endif
-							@endforeach
-                          </div> 
-                            
-                        <div class="form-group">
-                            <div class="row">
-                            <div class="col-md-6">
-                            <form action="{{ route('pdfuser') }}" method="get" style="margin-right: 23px" class="col-sm-1">
+                        <div class="col-md-2 form-group xl-print">
+                        <form action="{{ route('pdfuser') }}" method="get" style="margin-right: 23px" class="col-sm-1">
                                 <input type="text" name="name" class="text_div form-controll" style="display:none">
                                 <input type="text" name="role_id" class="role_id form-controll" style="display:none">
                                 <input type="text" name="email" class="email form-controll" style="display:none">
@@ -70,13 +69,34 @@ input[type="text"], input[type="email"] {
                                 <input type="text" name="user_name" class="user_name form-controll" style="display:none">
                                 <button formtarget="_blank" type="submit" class="btn btn-default btn-sm">Print</button>
                             </form>
+                        </div>
+                        <div class="col-md-2 form-group pull-right xlp">
+                            <a href="{{ route('user_create') }}" class="btn btn-sm btn-primary">Create</a>
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default"><i class="fa fa-fw fa-filter"></i></button>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                    <div class="delete"></div>
+                    <div class="flash-message">
+                   
+							@foreach (['danger', 'warning', 'success', 'info'] as $msg)
+							  @if(Session::has('alert-' . $msg))
+
+							  <p class="alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }} <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
+							  @endif
+							@endforeach
+                          </div> 
+                            
+                        <div class="form-group xl-input">
+                            <div class="row">
+                            <div class="col-md-6">
+                            
                             </div>
                             <div class="col-md-4"></div>
-                            <div class="col-md-2">
-                            <div class="form-group ">
-                            <input name="searchingfield" type="text" class="form-control" id="searchingfield">
-                            </div>
-                            </div>
+                                <div class="col-md-2 form-group ">
+                                    <input name="searchingfield" type="text" class="form-control" id="searchingfield">
+                                </div>
                             </div>
                         </div>
                         <!--
@@ -122,7 +142,7 @@ input[type="text"], input[type="email"] {
                                                 <br />
                                                 <div class="form-group">
                                                     <label for="name" class="col-md-12">Role <span class="dengertext">*</span></label>
-                                                    {!! Form::select('roles',$role_id,null,['id' => 'role_id','class' => 'form-control', 'placeholder' => 'Please Select']) !!}
+                                                    {!! Form::select('roleses',$role_id,null,['id' => 'role_id','class' => 'form-control', 'placeholder' => 'Please Select']) !!}
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">

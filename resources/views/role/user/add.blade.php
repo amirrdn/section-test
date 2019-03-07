@@ -19,10 +19,12 @@
                     <div class="box-header with-border">
                         <h3 class="box-title">Add Roles</h3>
                     </div>
-                    <form role="form" action="{{ route('saverolegroup') }}" method="POST">
-                      @csrf
-						          @include('role.form')
-                    </form>
+                    <meta name="_token" content="{{ csrf_token() }}" /> 
+						{{ method_field('post') }}
+						{!! Form::open(['method' => 'POST','route' => ['permissionsave'],'role' => 'form', 'data-toggle' => 'validator', 'novalidate' => 'true', 'enctype' => 'multipart/form-data'])  !!}
+						{{ csrf_field() }}
+						@include('role.user.form_add')
+						{!! Form::close() !!}
                 </div>
             </div>
         </div>

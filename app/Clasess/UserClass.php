@@ -70,7 +70,7 @@ class UserClass {
         $user->merital_status       = $request->merital_status;
         $user->user_name            = $request->user_name;
         $user->is_enebled           = $request->is_enebled;
-        $user->role_id              = 0;
+        $user->role_id              = $request->role_id;
         $user->user_image           = $post_imgs;
         $user->role                 = $request->role;
 
@@ -115,7 +115,7 @@ class UserClass {
         $user->merital_status       = $request->merital_status;
         $user->user_name            = $request->user_name;
         $user->is_enebled           = $request->is_enebled;
-        $user->role_id              = 0;
+        $user->role_id              = $request->role_id;
         $user->user_image           = $post_imgs;
         $user->role                 = $request->role;
 
@@ -130,8 +130,12 @@ class UserClass {
             return $pages->get();
         }
     }
-    public function permis($name)
+    public function permis($id)
     {
-        return Permission::where('parent_id',  $name)->pluck('name');
+        return Permission::where('module',$id)->pluck('name');
+    }
+    public function searchpermission($name)
+    {
+        return Permission::where('name', 'like', '%'.$name.'%')->pluck('name');
     }
 }

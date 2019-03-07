@@ -19,10 +19,11 @@
                     <div class="box-header with-border">
                         <h3 class="box-title">Update Roles</h3>
                     </div>
-                    {!! Form::model($role, ['files'=> 'true','method' => 'POST','route' => ['updatetrolegroup', $role->id], 'role' => 'form', 'data-toggle' => 'validator', 'novalidate' => 'true', 'name' => 'contentform', 'id' => 'demoForm', 'enctype' => 'multipart/form-data'])  !!}
+                    <form action="{{ route('users.setRolePermission', request()->get('role')) }}" method="post">
                     @csrf
-                        @include('role.form')
-                    {!! Form::close() !!}
+                    <input type="hidden" name="_method" value="PUT">
+                        @include('role.user.form')
+                    </form>
                 </div>
             </div>
         </div>

@@ -8,6 +8,7 @@ use Yajra\Datatables\Datatables;
 
 use App\User;
 use App\Models\MPages;
+use App\Models\MModules;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -16,6 +17,7 @@ use Carbon\Carbon;
 use PDF;
 use DB;
 use Session;
+use Illuminate\Support\Facades\Input;
 
 class UserController extends Controller
 {
@@ -26,7 +28,7 @@ class UserController extends Controller
     }
     public function index()
     {
-        $role_id                    = $this->user->pluckRoles();
+        $role_id                    = Role::pluck('name', 'id');
         $status                     = User::pluck('is_enebled');
         return view('user.index', compact('role_id', 'status'));
     }
@@ -44,25 +46,19 @@ class UserController extends Controller
     }
     public function getData(Request $request)
     {
-        $user                       = User::join('role', 'users.role_id', 'role.id')->where('users.is_delete', '0')
-                                    ->select(['users.id', 'users.user_image', 'users.first_name', 'users.middle_name',
-                                    'users.last_name', 'user_name', 'users.role_id', 'users.is_enebled', 'users.email',
-                                    'users.last_login_at', 'role.id as role_id', 'role.role_name']);
+        $roles = \Spatie\Permission\Models\Role::all();
+        $user                       = User::with('roles')->where('users.is_delete', '0')
+                                    ;
+                                    //return json_encode($user->get());
         $data = DataTables::of($user)
-       
-        /*
-        if (request()->has('searchingfield')) {
-            $data->filter(function ($query) {
-                $query->where('users.user_name', 'like', "%" . request('searchingfield') . "%")->where('users.is_delete', '0');
-                $query->orWhere('users.first_name', 'like', "%" . request('searchingfield') . "%")->where('users.is_delete', '0');
-                $query->orWhere('users.middle_name', 'like', "%" . request('searchingfield') . "%")->where('users.is_delete', '0');
-                $query->orWhere('users.last_name', 'like', "%" . request('searchingfield') . "%")->where('users.is_delete', '0');
-        });
-    }
-    */
-        
         ->addColumn('nomers', function($user) {
             return $user++;
+        })
+        ->addColumn('role', function($user) {
+           //$user->whereHas("roles")->get();
+           foreach ($user->getRoleNames() as $role){
+               return $role;
+           }
         })
         ->addColumn('action', function ($user) {
             return '<a href="'. route('edit_user', $user->id).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>
@@ -95,14 +91,6 @@ class UserController extends Controller
             if (request()->has('user_name')) {
                 $query->where('users.user_name', 'like', "%" . request('user_name') . "%")->where('users.is_delete', '0');
             }
-            if (request()->has('roles')) {
-                $query->where('users.role_id', 'like', "%" . request('roles') . "%")->where('users.is_delete', '0');
-            }
-            
-            
-            
-           
-            
             
         });
         if (!empty($request->get('name') )) {
@@ -126,6 +114,13 @@ class UserController extends Controller
                 $query->where('users.is_enebled', 'like', request('statusd'));
             });
         }
+        if (!empty($request->get('roleses') )) {
+            $data->filter(function ($query) {
+                $query->whereHas('roles', function ($queryd) {
+                    return $queryd->where('id', Input::get('roleses'));
+                });
+            });
+        }
         $data->removeColumn('id');
         $data->rawColumns(['user_image', 'action', 'is_enebled', 'checkbox']);
         
@@ -134,9 +129,10 @@ class UserController extends Controller
     public function edit($id)
     {
         $user                       = User::find($id);
-        $role_id                    = $this->user->pluckRoles();
+        $idrole                     = $user->role_id;
+        $roles                    = Role::select('name', 'id')->get();
 
-        return view('user.edit', compact('user', 'role_id'));
+        return view('user.edit', compact('user', 'roles', 'idrole'));
     }
     public function updete(Request $request, $id)
     {
@@ -255,13 +251,16 @@ class UserController extends Controller
         if (!empty($role)) {
             $getRole = Role::findByName($role);
             $hasPermission = DB::table('role_has_permissions')
-                ->select('permissions.name', 'permissions.parent_id')
+                ->select('permissions.name')
                 ->join('permissions', 'role_has_permissions.permission_id', '=', 'permissions.id')
                 //->where('role_id', $getRole->id)->get()->pluck('name', 'page_id')->all();
                 ->where('role_id', $getRole->id)->get()->pluck('name')->all();
-            $permissions = Permission::where('permissions.parent_id', 0)->get();
+           // $permissions = Permission::where('permissions.parent_id', 0)->get();
+           $permissions = MModules::select('id','module_names')->get();
+
             $permissions1 = new UserClass;
         }
+        //return json_encode($permissions);
         return view('user.role_permission', compact('roles', 'permissions', 'hasPermission', 'permissions1', 'pages'));
     }
     public function addPermission(Request $request)
@@ -271,7 +270,12 @@ class UserController extends Controller
             'name' => 'required|string'
         ]);
         $name_permission = Permission::where('id', $request->parent_id)->get();
-        $b_name = $name_permission->first()->name;
+        $b_names = $name_permission->first();
+        if(!empty($b_names)){
+            $b_name = $b_names->name;
+        }else{
+            $b_name = '';
+        }
         $permission = Permission::firstOrCreate([
             'name' => strtolower($b_name .' '. $request->name),
             'parent_id' => $request->parent_id
@@ -280,10 +284,21 @@ class UserController extends Controller
     }
     public function setRolePermission(Request $request, $role)
     {
-        //return $request->permission;
-        $role = Role::findByName($role);
-        //$role = $role->where('parent_id', 0);
-        $role->syncPermissions($request->permission);
+        $admin_role = Role::where('name',$role)->first();
+        
+        //$permission = Permission::where('name','like','%' . $request->permission .'%')->first()->name;
+        $permission     = Permission::query();
+        if($request->permission > 1){
+            foreach($request->permission as $word){
+                $permission->orWhere('name', 'LIKE', '%'.$word.'%');
+            }
+        }else{
+            $permission->where('name','like','%' . $request->permission .'%')->first()->name;
+        }
+        $permission = $permission->distinct()->pluck('name');
+        //return json_encode($permission);
+        $admin_role->syncPermissions($permission);
+
         return redirect()->back()->with(['success' => 'Permission to Role Saved!']);
     }
     public function showuser()

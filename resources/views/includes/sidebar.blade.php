@@ -67,7 +67,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{ route('roles') }}"><i class="fa fa-circle-o"></i> Index</a></li>
+            <li><a href="{{ route('rolegroup') }}"><i class="fa fa-circle-o"></i> Index</a></li>
             <li><a href="{{ route('rolescreate') }}"><i class="fa fa-circle-o"></i> Add</a></li>
           </ul>
         </li>

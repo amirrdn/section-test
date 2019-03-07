@@ -118,7 +118,15 @@
             </div>
             <div class="form-group">
                 <label for="name">Role <span class="dengertext">*</span></label>
-                {!! Form::select('role',$role_id,null,['class' => 'form-control', 'placeholder' => 'Please Select']) !!}
+                <select name="role" class="form-control">
+                @if ($roles->count())
+
+                    @foreach($roles as $role)
+                        <option value="{{ $role->id }}" {{ $idrole == $role->id ? 'selected="selected"' : '' }}>{{ $role->name }}</option>    
+                    @endforeach
+
+                    @endif
+                </select>
             </div> 
             <div class="form-group">
                 <label for="dob">Picture <span class="dengertext">*</span></label>

@@ -31,60 +31,105 @@
 							  @endif
 							@endforeach
                         </div> 
-                        <form role="form" action="{{ route('saverolegroup') }}" method="POST">
-                                @csrf
-                                <div class="form-group">
-                                    <label for="name">Role</label>
-                                    <input type="text" 
-                                    name="name"
-                                    class="form-control {{ $errors->has('name') ? 'is-invalid':'' }}" id="name" required>
-                                </div>
-                                <div class="card-footer">
-                                    <button class="btn btn-primary">Simpan</button>
-                                </div>
-                            </form>
                             <div class="table-responsive">
-                                <table class="table table-hover">
+                            <form id="frm-example" method="POST">
+                                {{ csrf_field() }}
+                                <table class="table table-hover" id="role-table">
                                     <thead>
                                         <tr>
                                             <td>#</td>
                                             <td>Role</td>
                                             <td>Guard</td>
+                                            <td>status</td>
                                             <td>Created At</td>
                                             <td>Aksi</td>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php $no = 1; @endphp
-                                        @forelse ($role as $row)
-                                        <tr>
-                                            <td>{{ $no++ }}</td>
-                                            <td>{{ $row->name }}</td>
-                                            <td>{{ $row->guard_name }}</td>
-                                            <td>{{ $row->created_at }}</td>
-                                            <td>
-                                                <form action="{{ route('deleterolegroup', $row->id) }}" method="POST">
-                                                    @csrf
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                        @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center">Tidak ada data</td>
-                                        </tr>
-                                        @endforelse
+                                       
                                     </tbody>
                                 </table>
+                                <button class="btn btn-danger btn-sm">Delete Checked</button>
+                                </form>
                             </div>
-                            <div class="float-right">
-                                {!! $role->links() !!}
-                            </div>
+                           
                     </div>
                 </div>
             </div>
         </div>
     </section>
 </div>
+<script src="{{ asset('admin/bower_components/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ asset('admin/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('admin/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    var t = $('#role-table').DataTable({
+        processing: true,
+        serverSide: true,
+        "columnDefs": [ {
+            "searchable": false,
+            "orderable": false,
+            "targets": 1
+        } ],
+        "order": [[ 1, 'asc' ]],
+        ajax: '{{ route('rolesdata') }}',
+        columns: [
+            {data: 'checkbox', name: 'checkbox',searchable: true, sortable : false},
+            {data: 'id', name: 'id'},
+            {data: 'name', name: 'name'},
+            {data: 'guard_name', name: 'guard_name'},
+            {data: 'status', name: 'status'},
+            {data: 'action', name: 'action'},
+        ]
+    });
+    t.on('order.dt search.dt', function () {
+        t.column(1, {search:'applied'}).nodes().each( function (cell, i) {
+            cell.innerHTML = i+1;
+        });
+    }).draw();
+
+    $('#example-select-all').click(function (e){
+      var rows = $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
+      $('input[type="checkbox"]', rows).prop('checked', this.checked);
+   });
+
+   $('#frm-example').on('submit', function(e){
+      var form = this;
+      var $button = $(this);
+    
+      // Iterate over all checkboxes in the table
+      $(this).closest('table').find('td input:checkbox').prop('checked', this.checked).each(function(){
+         // If checkbox doesn't exist in DOM
+         if(!$.contains(document, this)){
+            // If checkbox is checked
+            if(this.checked){
+               // Create a hidden element 
+               $(form).append(
+                  $('<input>')
+                     .attr('type', 'hidden')
+                     .attr('name', this.name)
+                     .val(this.value)
+               );
+            }
+         } 
+      });
+
+      $('#example-console').text($(form).serialize()); 
+      e.preventDefault();
+      var formData = $('#frm-example').serialize();
+      $.ajax({
+        url: '{{ route("deleterolegroup") }}',
+        data: formData,
+        type: 'post',
+        dataType: 'json',
+        success: function(data) {
+          $('#role-table').DataTable().ajax.reload()
+          //$('div.flash-message').html(data);
+        }
+    });
+});
+});
+</script>
 @endsection

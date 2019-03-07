@@ -102,7 +102,7 @@
                 d.name = $('input[name=name]').val();
                 d.email = $('input[name=email]').val();
                 d.user_name = $('input[name=user_name]').val();
-                d.roles = $('select[name=roles]').val();
+                d.roleses = $('select[name=roleses]').val();
                 d.statusd = $('select[name=status]').val();
                 d.searchingfield = $('input[name=searchingfield]').val();
             }
@@ -158,7 +158,7 @@
         e.preventDefault();
        $('input[name=email]').val("");
        $('input[name=user_name]').val("");
-       $('select[name=roles]').prop('selectedIndex',0);
+       $('select[name=roleses]').prop('selectedIndex',0);
         $('input[name=name]').val(" ");
        $('select[name=status]').prop('selectedIndex',0);
     });
