@@ -61,13 +61,18 @@
     </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-<?php  use App\Clasess\UserClass;?>
+<?php  
+    use App\Clasess\UserClass;
+    use Spatie\Permission\Models\Role;;
+?>
 @guest
 @else
     <?php
         $user      = new UserClass;
 
         $getname    = $user->getNameUser(\Auth::user()->id);
+        $user_join  = Role::join('users', 'roles.id', 'users.role_id')->select('roles.name', 'roles.id', 'users.id')->where('users.id',\Auth::user()->id)->first();
+        //dd($user_join);
     ?>
 @endguest
     <div class="wrapper">

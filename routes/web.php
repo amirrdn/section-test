@@ -50,7 +50,7 @@ Route::get('/users/index', 'User\UserController@showuser')->name('usersshow');
 Route::put('/users/roles/{id}', 'User\UserController@setRole')->name('users.set_role');
 Route::post('/users/permission', 'User\UserController@addPermission')->name('users.add_permission');
 Route::get('/users/role-permission', 'User\UserController@rolePermission')->name('users.roles_permission');
-Route::put('/users/permission', 'User\UserController@setRolePermission')->name('users.setRolePermission');
+Route::post('/users/permission', 'User\UserController@setRolePermission')->name('users.setRolePermission');
 Route::get('/users/roles/{id}', 'User\UserController@roles')->name('users.roles');
 
 Route::get('/users/add-permission', 'User\UserRolesController@create')->name('permissionadd');

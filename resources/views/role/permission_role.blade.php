@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
+
 <?php
     use Spatie\Permission\Models\Permission;
 ?>
@@ -47,7 +46,7 @@
                                 <div class="form-group">
                                     <a href="{{route('permissionadd') }}" class="btn btn-sm btn-primary pull-right">Create</a>
                                 </div>
-                                <div class="form-group" style="clear:both;margin-top: 38px;">
+                               <!-- <div class="form-group" style="clear:both;margin-top: 38px;">
                                     <label for="" class="col-md-4">Roles</label>
                                     <div class="input-group">
                                         <select name="role" class="col-md-8 form-control">
@@ -59,7 +58,7 @@
                                             <button class="btn btn-danger">Check!</button>
                                         </span>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </form>
@@ -73,73 +72,88 @@
                                     @endif
                                     @endforeach
                                 </div> 
-                                @if (!empty($permissions))
-                                
-                                @include('role.ajax_data')
-                            @else
                             <!--
                                 <div class="row">
                                 <div class="col-md-1">
-                                <table class="table">
-                                        <tr>
-                                            <th>Module</th>
-                                        </tr>
-                                        <tr>
-                                            <th>-</th>
-                                        </tr>
-                                       @foreach($module_td as $m)
-                                       <tr>
-                                        <td>{{$m->module_names}}</td>
-                                        </tr>
-                                        @endforeach
-                                </table>
-                                </div>
-                                
-                                <div class="col-md-11">
-                                
-                                    <ul class="nav nav-tabs" id="myTabs">
-                                    @foreach($roles_name as $r)
-                                    <?php
-                                        $name_role     = str_replace(' ', '+', $r->name);
-                                    ?>
-                                        <li><a href="#{{$r->id}}" data-url="{{ url('/users/role-permission?role='.$name_role) }}">{{$r->name}}</a></li>
+                                    -->
+                                    <ul class="nav nav-tabs" role="tablist" id="myTab">
+                                    @foreach($roles_name as $key => $r)
+                                        <li class=<?php if($key==0){echo "active";} ?>><a href="{{ url('/users/role-permission?role='.$r->name) }}" data-target="#{{$r->id}}" class="media_node active span" id="contacts_tab" data-toggle="tabajax" rel="tooltip"> {{$r->name}} </a></li>
                                     @endforeach
                                     </ul>
-                                    
+
                                     <div class="tab-content">
-                                    @foreach($roles_name as $rs)
-                                        <div class="tab-pane" id="{{$rs->id}}">
-                                            
+                                        @foreach($roles_name as $keys => $rs)
+                                        <form class="tab-pane fade <?php if($keys==0){echo "active";} ?> in " id="{{$rs->id}}">
+                                            <div id="op">
+                                                @include('role.ajax_data')
+                                            </div>
+                                        </form>
+                                        @endforeach
                                         </div>
-                                    @endforeach
-                                    </div>
-                                </div>
-                                    -->
-                        @endif
                             
                 </div>
             </div>
         </div>
     </section>
 </div>
-<script src="{{ asset('admin/bower_components/jquery/dist/jquery.min.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+@stop
+@push('scripts')
 <script>
+$(function() {
+    var url = window.location.href+'?role=Admin';
+    $('#myTab li a[href="'+url+'"]').tab('show');
 
-$(document).ready( function(){
-    $('#myTabs a').click(function (e) {
-	e.preventDefault();
-  
-	var url = $(this).attr("data-url");
-  	var href = this.hash;
-  	var pane = $(this);
-	// ajax load from data-url
-	$(href).load(url,function(result){      
-	    pane.tab('show').val(result);
-	});
+    $('#myTab li').removeClass('active open');
+    var url = window.location.href+'?role=Admin';
+    $('#op').load(url);
+    url && $('ul.nav a[href="' + url + '"]').tab('show');
+    
+    $('[data-toggle="tabajax"]').click(function(e) {
+        var $this = $(this),
+            loadurl = $this.attr('href'),
+            targ = $this.attr('data-target');
+
+        $.get(loadurl, function(data) {
+            $(targ).html("<form>"+data+"</form>");
+        });
+
+        $this.tab('show');
+        return false;
+    });
+});
+$('[data-toggle="tabajax"]').click(function(e) {
+    var $this = $(this),
+    targ = $this.attr('data-target');
+    $(targ).on('submit',function(e){
+    e.preventDefault();
+      var formData = $(targ).serialize();
+      swal({
+        title: "Are you sure?",
+        //text: "You will not be able to recover this imaginary file!",
+        type: "info",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, update it!",
+        closeOnConfirm: false
+    }, function (isConfirm) {
+        if (!isConfirm) return;
+        $.ajax({
+            url: '{{ route("setroles") }}',
+            data: formData,
+            type: 'post',
+            dataType: "html",
+            success: function () {
+                swal("Done!", "It was succesfully update permissions!", "success");
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                swal("Error update!", "Please try again", "error");
+            }
+        });
+    });;
 });
 
 });
 
 </script>
-@endsection
+@endpush

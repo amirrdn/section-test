@@ -12,6 +12,7 @@
           Guest
           @else
           <p> {{ $getname->first_name }} {{ $getname->middle_name }} {{ $getname->last_name }}</p>
+          <p>{{ $user_join->name }}</p>
           @endguest
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
@@ -42,8 +43,8 @@
             <li><a href="{{ route('addcust') }}"><i class="fa fa-circle-o"></i> Add</a></li>
           </ul>
         </li>
-        @role('Admin')
-        @if (auth()->user()->can('user view') || auth()->user()->can('Delete') || auth()->user()->can('Create'))
+        
+        @if (auth()->user()->can('user view') || auth()->user()->can('user delete') || auth()->user()->can('roles create'))
         <li class="treeview">
           <a href="#">
             <i class="fa fa-users"></i> <span>User</span>
@@ -52,12 +53,17 @@
             </span>
           </a>
           <ul class="treeview-menu">
+            @if (auth()->user()->can('user view') )
             <li><a href="{{ route('user_list') }}"><i class="fa fa-circle-o"></i> Index</a></li>
-            <li><a href="{{ route('addcust') }}"><i class="fa fa-circle-o"></i> Add</a></li>
+            @endif
+            @if (auth()->user()->can('user create') )
+            <li><a href="{{ route('user_create') }}"><i class="fa fa-circle-o"></i> Add</a></li>
+            @endif
           </ul>
         </li>
         @endif
-        @endrole
+        
+        @if (auth()->user()->can('roles view') || auth()->user()->can('roles add') || auth()->user()->can('Create'))
         <li class="treeview">
           <a href="#">
             <i class="fa fa-users"></i> <span>Roles</span>
@@ -71,7 +77,7 @@
             <li><a href="{{ route('users.roles_permission') }}"><i class="fa fa-circle-o"></i>Roles Permissions</a></li>
           </ul>
         </li>
-
+        @endif
       </ul>
     </section>
     <!-- /.sidebar -->

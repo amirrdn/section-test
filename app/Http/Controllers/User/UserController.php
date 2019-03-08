@@ -47,8 +47,7 @@ class UserController extends Controller
     public function getData(Request $request)
     {
         $roles = \Spatie\Permission\Models\Role::all();
-        $user                       = User::with('roles')->where('users.is_delete', '0')
-                                    ;
+        $user                       = User::with('roles')->where('users.is_delete', '0');
                                     //return json_encode($user->get());
         $data = DataTables::of($user)
         ->addColumn('nomers', function($user) {
@@ -61,8 +60,8 @@ class UserController extends Controller
            }
         })
         ->addColumn('action', function ($user) {
-            return '<a href="'. route('edit_user', $user->id).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>
-               <a href="'. route('delete_user', $user->id) .'" class="btn btn-xs btn-danger" onclick=\'return confirm("Are you sure want to delete?")\'><i class="glyphicon glyphicon-trash"></i> Delete</a>   ';
+            return '<a href="'. route('edit_user', $user->id).'" class="btn btn-xs btn-primary">Edit</a>
+               <a href="'. route('delete_user', $user->id) .'" class="btn btn-xs btn-danger" onclick=\'return confirm("Are you sure want to delete?")\'>Delete</a>   ';
         })
         ->addColumn('user_image', function ($user) { 
             $url= asset($user->user_image);
@@ -249,6 +248,13 @@ class UserController extends Controller
         $roles = Role::all()->pluck('name');
         $pages = Permission::select('name', 'id')->where('parent_id', 0)->get();
         if (!empty($role) || $request->ajax()) {
+            
+            
+        }
+        $roles_name                  = Role::select('name', 'id')->get();
+        $module_td                   = MModules::all();
+        $getddataroles               = new UserClass;
+        if($request->ajax()){
             $getRole = Role::findByName($role);
             $hasPermission = DB::table('role_has_permissions')
                 ->select('permissions.name')
@@ -257,11 +263,8 @@ class UserController extends Controller
            $permissions = MModules::select('id','module_names')->get();
 
             $permissions1 = new UserClass;
-            
+            return view('role.ajax_data', compact('roles_name','module_td','getddataroles','roles', 'permissions', 'hasPermission', 'permissions1', 'pages'))->render();
         }
-        $roles_name                  = Role::select('name', 'id')->get();
-        $module_td                   = MModules::all();
-        $getddataroles               = new UserClass;
         //return json_encode($permissions);
         return view('role.permission_role', compact('roles_name','module_td','getddataroles','roles', 'permissions', 'hasPermission', 'permissions1', 'pages'));
     }

@@ -53,11 +53,8 @@
         </div>
     </section>
 </div>
-
-<script src="{{ asset('admin/bower_components/jquery/dist/jquery.min.js') }}"></script>
-<script src="{{ asset('admin/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('admin/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+@stop
+@push('scripts')
 <script type="text/javascript">
 $(document).ready(function() {
     var t = $('#role-table').DataTable({
@@ -126,4 +123,4 @@ $(document).ready(function() {
 });
 });
 </script>
-@endsection
+@endpush

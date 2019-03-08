@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
 <style>
 .modal-body label{
@@ -72,7 +71,9 @@ input[type="text"], input[type="email"] {
                             </form>
                         </div>
                         <div class="col-md-2 form-group pull-right xlp">
+                            @if (auth()->user('Admin')->can('user create'))
                             <a href="{{ route('user_create') }}" class="btn btn-sm btn-primary">Create</a>
+                            @endif
                             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default"><i class="fa fa-fw fa-filter"></i></button>
                         </div>
                         </div>
@@ -185,6 +186,141 @@ input[type="text"], input[type="email"] {
         </div>
     </section>
 </div>
+@stop
+@push('scripts')
+<script>
+$(function() {
+    var t = $('#users-table').DataTable( {
+      'searching'   : false,
+      "columnDefs": [ {
+            "searchable": false,
+            "orderable": false,
+            "targets": 1
+        } ],
+        "order": [[ 1, 'asc' ]],
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '{!! route('get.datauser') !!}',
+            data: function (d) {
+                d.name = $('input[name=name]').val();
+                d.email = $('input[name=email]').val();
+                d.user_name = $('input[name=user_name]').val();
+                d.roleses = $('select[name=roleses]').val();
+                d.statusd = $('select[name=status]').val();
+                d.searchingfield = $('input[name=searchingfield]').val();
+            }
+        },
+        columns: [
+                    //{ data: 'id', name: 'users.id' },
+                    { data: 'checkbox', name: 'checkbox',searchable: true, sortable : false },
+                    { data: 'user_image', name: 'posts.user_image' },
+                    { data: 'user_image', name: 'posts.user_image' },
+                    { data: 'first_name', name: 'users.first_name' },
+                    { data: 'user_name', name: 'users.user_name' },
+                    { data: 'role', name: 'role' },
+                    { data: 'is_enebled', name: 'users.is_enebled' },
+                    { data: 'email', name: 'users.email' },
+                    { data: 'last_login_at', name: 'users.last_login_at' },
+                    {data: 'action', name: 'action'}
+                    
 
+                ],
+                
+    } );
+    
+    t.on('order.dt search.dt', function () {
+        t.column(1, {search:'applied'}).nodes().each( function (cell, i) {
+            cell.innerHTML = i+1;
+        });
+    }).draw();
+    $('#search-form').on('submit',function(e) {
+        
+        var name      = $('#name').val();
+        var email     = $('#email').val();
+        var username  = $('#user_name').val();
 
-@endsection
+        $('input[type=text].text_div').val(name);
+        
+        $('input[type=text].email').val(email);
+        $('input[type=text].user_name').val(username);
+
+        $('#modal-default').modal('toggle');
+       
+        t.draw();
+        e.preventDefault();
+       $('input[name=email]').val("");
+       $('input[name=user_name]').val("");
+       $('select[name=roleses]').prop('selectedIndex',0);
+        $('input[name=name]').val(" ");
+       $('select[name=status]').prop('selectedIndex',0);
+    });
+    $("#role_id").on('change', function () {
+      $('input[type=text].role_id').val($(this).val());
+    });
+    $("#statusd").on('change', function () {
+      $('input[type=text].status').val($(this).val());
+    });
+
+    $('#searchingfield').on('keyup',function(e){
+      var input = $(this);
+      var name      = $('#searchingfield').val();
+      if(input.val().length > 1){
+        $('input[type=text].text_div').val(name);
+        t.draw();
+        e.preventDefault();
+      }else{
+        $('input[type=text].text_div').val(name);
+        t.draw();
+        e.preventDefault();
+      }
+      //input.next("span").text(input.val().length + " chars");
+    });
+
+    $('#example-select-all').click(function (e){
+      // Get all rows with search applied
+      var rows = $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
+      // Check/uncheck checkboxes for all rows in the table
+      $('input[type="checkbox"]', rows).prop('checked', this.checked);
+   });
+
+   $('#frm-example').on('submit', function(e){
+      var form = this;
+      var $button = $(this);
+    
+      // Iterate over all checkboxes in the table
+      $(this).closest('table').find('td input:checkbox').prop('checked', this.checked).each(function(){
+         // If checkbox doesn't exist in DOM
+         if(!$.contains(document, this)){
+            // If checkbox is checked
+            if(this.checked){
+               // Create a hidden element 
+               $(form).append(
+                  $('<input>')
+                     .attr('type', 'hidden')
+                     .attr('name', this.name)
+                     .val(this.value)
+               );
+            }
+         } 
+      });
+
+      $('#example-console').text($(form).serialize()); 
+      e.preventDefault();
+      var formData = $('#frm-example').serialize();
+      $.ajax({
+        url: '{{ route("delete_users") }}',
+        data: formData,
+        type: 'post',
+        dataType: 'json',
+        success: function(data) {
+          $('#users-table').DataTable().ajax.reload()
+          //$('div.flash-message').html(data);
+        }
+    });
+   });
+   
+    
+} );
+</script>
+@endpush
